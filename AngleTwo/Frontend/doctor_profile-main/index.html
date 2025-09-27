@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Doctor Profiles - Modern UI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Chart.js for ratings breakdown -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- jsPDF for download as PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="header">
+  <div class="search-container">
+    <i class="fas fa-search"></i>
+    <input type="text" id="search-doctors" placeholder="Search doctors by name, specialization...">
+  </div>
+  
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">
+      <i class="fas fa-th-large"></i> <span class="lang-all">All</span>
+    </button>
+    <button class="filter-btn" data-filter="available">
+      <i class="fas fa-user-check"></i> <span class="lang-available">Available</span>
+    </button>
+    <button class="filter-btn" data-filter="cardiologist">
+      <i class="fas fa-heart"></i> <span class="lang-cardiologist">Cardiologist</span>
+    </button>
+    <button class="filter-btn" data-filter="orthopedic">
+      <i class="fas fa-bone"></i> <span class="lang-orthopedic">Orthopedic</span>
+    </button>
+    <button class="filter-btn" id="compare-btn">
+      <i class="fas fa-balance-scale"></i> <span class="lang-compare">Compare</span>
+    </button>
+    <button class="language-toggle" id="language-toggle">
+      <i class="fas fa-language"></i>
+    </button>
+    <button class="dark-mode-toggle" id="dark-mode-toggle">
+      <i class="fas fa-moon"></i>
+    </button>
+  </div>
+</div>
+
+<div class="card-container">
+
+  <!-- Doctor 1 -->
+  <div class="doctor-card" data-specialization="cardiologist" data-available="true">
+    <div class="verified-badge" title="Verified Doctor">
+      <i class="fas fa-check"></i>
+    </div>
+    <div class="offer-badge">
+      <i class="fas fa-tag"></i> <span class="lang-discount">20% Off</span> <span class="lang-first">First</span> <span class="lang-visit">Visit</span>
+    </div>
+    <div class="top-section">
+      <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80" alt="Doctor Photo">
+      <div class="top-info">
+        <h2>Dr. Rohan Kumar Jha, MD</h2>
+        <p class="specialization">Cardiologist</p>
+        <span class="status-badge">🟢 <span class="lang-available">Available</span></span>
+      </div>
+      <div class="rating-badge">
+        <i class="fas fa-star"></i> 4.8
+      </div>
+    </div>
+
+    <div class="info-section">
+      <p><strong class="lang-experience">Experience:</strong> 12+ <span class="lang-years">Years</span></p>
+      <p><strong class="lang-qualifications">Qualifications:</strong> MBBS, MD (Cardiology)</p>
+      <p><strong class="lang-affiliation">Affiliation:</strong> Apollo Hospital, Patna</p>
+
+      <div class="badges">
+        <div class="badge"><i class="fa-solid fa-hospital"></i> Apollo Clinic</div>
+        <div class="badge"><i class="fa-solid fa-clock"></i> <span class="lang-wait">15 min wait</span></div>
+        <div class="badge"><i class="fa-solid fa-language"></i> English, Hindi</div>
+        <div class="badge"><i class="fa-solid fa-indian-rupee-sign"></i> ₹1000 <span class="lang-fee">Fee</span></div>
+      </div>
+      
+      <!-- Dynamic Fee Calculator -->
+      <div class="fee-calculator">
+        <h4 class="lang-consultation-fee">Consultation Fee</h4>
+        <div class="fee-option" data-fee="1000">
+          <label>
+            <input type="radio" name="consultation-type-1" value="in-person" checked> 
+            <span class="lang-in-person">In-Person</span>
+          </label>
+          <span>₹1000</span>
+        </div>
+        <div class="fee-option" data-fee="800">
+          <label>
+            <input type="radio" name="consultation-type-1" value="video"> 
+            <span class="lang-video-consultation">Video Consultation</span>
+          </label>
+          <span>₹800</span>
+        </div>
+        <div class="total-fee">
+          <span class="lang-total">Total</span>: ₹<span id="total-fee-1">1000</span>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab active" data-tab="availability1"><span class="lang-availability">Availability</span></div>
+        <div class="tab" data-tab="reviews1"><span class="lang-reviews">Reviews</span></div>
+        <div class="tab" data-tab="publications1"><span class="lang-publications">Publications</span></div>
+        <div class="tab" data-tab="contact1"><span class="lang-contact">Contact</span></div>
+        <div class="tab" data-tab="insurance1"><span class="lang-insurance">Insurance</span></div>
+        <div class="tab" data-tab="booking1"><span class="lang-book-now">Book Now</span></div>
+      </div>
+
+      <div class="tab-content active" id="availability1">
+        <p><strong class="lang-next-available">Next Available:</strong> <span class="lang-tomorrow">Tomorrow</span> 10:30 AM</p>
+        <p><strong class="lang-consultation">Consultation:</strong> <span class="lang-online-inperson">Online / In-person</span></p>
+        <table>
+          <tr><th class="lang-mon">Mon</th><th class="lang-tue">Tue</th><th class="lang-wed">Wed</th><th class="lang-thu">Thu</th><th class="lang-fri">Fri</th><th class="lang-sat">Sat</th><th class="lang-sun">Sun</th></tr>
+          <tr><td>10-2</td><td>10-2</td><td>10-2</td><td>10-2</td><td>10-2</td><td>9-1</td><td class="lang-off">Off</td></tr>
+        </table>
+        <button class="btn book-btn" data-doctor="Dr. Rohan Kumar Jha"><span class="lang-book-appointment">Book Appointment</span></button>
+      </div>
+
+      <div class="tab-content" id="reviews1">
+        <!-- Ratings Breakdown Chart -->
+        <div class="ratings-chart">
+          <canvas id="ratingsChart1"></canvas>
+        </div>
+        
+        <div class="review-item">
+          <div class="review-header">
+            <span class="reviewer">Rajesh Kumar</span>
+            <span class="review-date">March 15, 2023</span>
+          </div>
+          <div class="review-rating">★★★★★</div>
+          <p>"Dr. Rohan provided excellent care for my heart condition. He explained everything clearly and was very patient with all my questions."</p>
+        </div>
+        
+        <div class="review-item">
+          <div class="review-header">
+            <span class="reviewer">Priya Singh</span>
+            <span class="review-date">February 28, 2023</span>
+          </div>
+          <div class="review-rating">★★★★☆</div>
+          <p>"Very professional and caring doctor. The wait time was a bit longer than expected but the consultation was thorough."</p>
+        </div>
+        
+        <div class="review-item more-reviews" style="display: none;">
+          <div class="review-header">
+            <span class="reviewer">Amit Patel</span>
+            <span class="review-date">February 10, 2023</span>
+          </div>
+          <div class="review-rating">★★★★★</div>
+          <p>"Dr. Jha is one of the best cardiologists I've consulted. His diagnosis was accurate and treatment effective."</p>
+        </div>
+        
+        <div class="load-more" id="load-more-1"><span class="lang-load-more">Load more reviews</span></div>
+        
+        <p><strong class="lang-achievements">Achievements:</strong> <span class="lang-gold-medal">Gold Medal in Cardiology, 2015</span></p>
+      </div>
+      
+      <div class="tab-content" id="publications1">
+        <div class="publication-item">
+          <div class="publication-title">"Impact of Lifestyle Changes on Cardiovascular Health in Urban Population"</div>
+          <div class="publication-meta">
+            <span>Journal of Cardiology, 2022</span>
+            <span><i class="fas fa-link"></i> <a href="#">View Publication</a></span>
+          </div>
+        </div>
+        
+        <div class="publication-item">
+          <div class="publication-title">"Advanced Techniques in Cardiac Imaging"</div>
+          <div class="publication-meta">
+            <span>Medical Imaging Review, 2021</span>
+            <span><i class="fas fa-link"></i> <a href="#">View Publication</a></span>
+          </div>
+        </div>
+        
+        <div class="publication-item">
+          <div class="publication-title">"Long-term Outcomes of Minimally Invasive Cardiac Procedures"</div>
+          <div class="publication-meta">
+            <span>International Journal of Cardiac Surgery, 2020</span>
+            <span><i class="fas fa-link"></i> <a href="#">View Publication</a></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="contact1">
+        <div class="contact">
+          <a href="https://maps.google.com?q=Apollo+Hospital+Patna" target="_blank"><i class="fa-solid fa-map-marker-alt"></i> Patna, Bihar</a>
+          <a href="tel:+911234567890"><i class="fa-brands fa-whatsapp"></i> +91 1234567890</a>
+          <a href="mailto:dr.rohan@example.com"><i class="fa-solid fa-envelope"></i> dr.rohan@example.com</a>
+          <a href="#"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+          <a href="#" class="video-consultation-link"><i class="fas fa-video"></i> <span class="lang-start-video-consultation">Start Video Consultation</span></a>
+        </div>
+        
+        <!-- Map with Directions -->
+        <div class="map-container">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3597.847853665205!2d85.13799731501907!3d25.611067783717155!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ed584eeee4a90b%3A0x6e8a1e951cb0e7f1!2sApollo%20Hospital%20Patna!5e0!3m2!1sen!2sin!4v1647859342381!5m2!1sen!2sin" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="insurance1">
+        <h4><span class="lang-insurance-accepted">Insurance Accepted</span></h4>
+        <div class="insurance-badges">
+          <div class="insurance-badge"><i class="fas fa-shield-alt"></i> Star Health</div>
+          <div class="insurance-badge"><i class="fas fa-shield-alt"></i> HDFC Ergo</div>
+          <div class="insurance-badge"><i class="fas fa-shield-alt"></i> ICICI Lombard</div>
+          <div class="insurance-badge"><i class="fas fa-shield-alt"></i> Bajaj Allianz</div>
+        </div>
+        
+        <h4><span class="lang-payment-options">Payment Options</span></h4>
+        <div class="payment-options">
+          <div class="payment-option"><i class="fab fa-cc-visa payment-icon"></i> Visa</div>
+          <div class="payment-option"><i class="fab fa-cc-mastercard payment-icon"></i> MasterCard</div>
+          <div class="payment-option"><i class="fab fa-cc-amex payment-icon"></i> Amex</div>
+          <div class="payment-option"><i class="fab fa-cc-paypal payment-icon"></i> PayPal</div>
+          <div class="payment-option"><i class="fas fa-mobile-alt payment-icon"></i> UPI</div>
+          <div class="payment-option"><i class="fas fa-wallet payment-icon"></i> <span class="lang-cash">Cash</span></div>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="booking1">
+        <div class="calendar-header">
+          <button class="calendar-nav" id="prev-month"><i class="fas fa-chevron-left"></i></button>
+          <span id="current-month">March 2023</span>
+          <button class="calendar-nav" id="next-month"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        
+        <div class="calendar">
+          <div class="calendar-day">S</div>
+          <div class="calendar-day">M</div>
+          <div class="calendar-day">T</div>
+          <div class="calendar-day">W</div>
+          <div class="calendar-day">T</div>
+          <div class="calendar-day">F</div>
+          <div class="calendar-day">S</div>
+          
+          <!-- Calendar days will be populated by JavaScript -->
+          <div class="calendar-day off">26</div>
+          <div class="calendar-day off">27</div>
+          <div class="calendar-day off">28</div>
+          <div class="calendar-day">1</div>
+          <div class="calendar-day">2</div>
+          <div class="calendar-day">3</div>
+          <div class="calendar-day">4</div>
+          <div class="calendar-day">5</div>
+          <div class="calendar-day">6</div>
+          <div class="calendar-day">7</div>
+          <div class="calendar-day">8</div>
+          <div class="calendar-day">9</div>
+          <div class="calendar-day">10</div>
+          <div class="calendar-day">11</div>
+          <div class="calendar-day active">12</div>
+          <div class="calendar-day">13</div>
+          <div class="calendar-day">14</div>
+          <div class="calendar-day">15</div>
+          <div class="calendar-day">16</div>
+          <div class="calendar-day">17</div>
+          <div class="calendar-day">18</div>
+          <div class="calendar-day">19</div>
+          <div class="calendar-day">20</div>
+          <div class="calendar-day">21</div>
+          <div class="calendar-day">22</div>
+          <div class="calendar-day">23</div>
+          <div class="calendar-day">24</div>
+          <div class="calendar-day">25</div>
+          <div class="calendar-day">26</div>
+          <div class="calendar-day">27</div>
+          <div class="calendar-day">28</div>
+          <div class="calendar-day">29</div>
+          <div class="calendar-day">30</div>
+          <div class="calendar-day">31</div>
+          <div class="calendar-day off">1</div>
+        </div>
+        
+        <h4><span class="lang-available-time-slots">Available Time Slots</span></h4>
+        <div class="time-slots">
+          <div class="time-slot unavailable">9:00 AM</div>
+          <div class="time-slot unavailable">9:30 AM</div>
+          <div class="time-slot">10:00 AM</div>
+          <div class="time-slot">10:30 AM</div>
+          <div class="time-slot">11:00 AM</div>
+          <div class="time-slot">11:30 AM</div>
+          <div class="time-slot">12:00 PM</div>
+          <div class="time-slot unavailable">12:30 PM</div>
+          <div class="time-slot unavailable">1:00 PM</div>
+        </div>
+        
+        <!-- Notification Preferences -->
+        <div class="notification-prefs">
+          <h4><span class="lang-notification-options">Notification Options</span></h4>
+          <div class="notification-option">
+            <input type="checkbox" id="email-reminder-1" checked>
+            <label for="email-reminder-1"><span class="lang-email-reminder">Email Reminder</span></label>
+          </div>
+          <div class="notification-option">
+            <input type="checkbox" id="sms-reminder-1" checked>
+            <label for="sms-reminder-1"><span class="lang-sms-reminder">SMS Reminder</span></label>
+          </div>
+          <div class="notification-option">
+            <input type="checkbox" id="whatsapp-reminder-1">
+            <label for="whatsapp-reminder-1"><span class="lang-whatsapp-reminder">WhatsApp Reminder</span></label>
+          </div>
+        </div>
+        
+        <button class="btn confirm-booking"><span class="lang-confirm-appointment">Confirm Appointment</span></button>
+      </div>
+
+      <div class="interactive">
+        <button class="favBtn"><i class="fa-regular fa-heart"></i></button>
+        <button class="shareBtn"><i class="fa-solid fa-share-nodes"></i></button>
+        <button class="download-pdf-btn" data-doctor-id="1"><i class="fas fa-download"></i> <span class="lang-download-pdf">PDF</span></button>
+        <button class="compare-doctor-btn" data-doctor-id="1"><i class="fas fa-balance-scale"></i> <span class="lang-compare">Compare</span></button>
+      </div>
+
+      <div class="qr">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=https://example.com/doctor1" alt="QR Code">
+        <p><span class="lang-scan-to-view">Scan to view profile</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Doctor 2 -->
+  <div class="doctor-card" data-specialization="orthopedic" data-available="false">
+    <div class="verified-badge" title="Verified Doctor">
+      <i class="fas fa-check"></i>
+    </div>
+    <div class="offer-badge">
+      <i class="fas fa-tag"></i> <span class="lang-free">Free</span> <span class="lang-follow-up">Follow-up</span>
+    </div>
+    <div class="top-section">
+      <img src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80" alt="Doctor Photo">
+      <div class="top-info">
+        <h2>Dr. Ananya Sharma, MS</h2>
+        <p class="specialization">Orthopedic Surgeon</p>
+        <span class="status-badge status-offline">🔴 <span class="lang-not-available">Not Available</span></span>
+      </div>
+      <div class="rating-badge">
+        <i class="fas fa-star"></i> 4.9
+      </div>
+    </div>
+
+    <div class="info-section">
+      <p><strong class="lang-experience">Experience:</strong> 8 <span class="lang-years">Years</span></p>
+      <p><strong class="lang-qualifications">Qualifications:</strong> MBBS, MS (Ortho)</p>
+      <p><strong class="lang-affiliation">Affiliation:</strong> AIIMS Delhi</p>
+
+      <div class="badges">
+        <div class="badge"><i class="fa-solid fa-hospital"></i> AIIMS</div>
+        <div class="badge"><i class="fa-solid fa-clock"></i> <span class="lang-wait">20 min wait</span></div>
+        <div class="badge"><i class="fa-solid fa-language"></i> English</div>
+        <div class="badge"><i class="fa-solid fa-indian-rupee-sign"></i> ₹800 <span class="lang-fee">Fee</span></div>
+      </div>
+      
+      <!-- Dynamic Fee Calculator -->
+      <div class="fee-calculator">
+        <h4 class="lang-consultation-fee">Consultation Fee</h4>
+        <div class="fee-option" data-fee="800">
+          <label>
+            <input type="radio" name="consultation-type-2" value="in-person" checked> 
+            <span class="lang-in-person">In-Person</span>
+          </label>
+          <span>₹800</span>
+        </div>
+        <div class="fee-option" data-fee="600">
+          <label>
+            <input type="radio" name="consultation-type-2" value="video"> 
+            <span class="lang-video-consultation">Video Consultation</span>
+          </label>
+          <span>₹600</span>
+        </div>
+        <div class="total-fee">
+          <span class="lang-total">Total</span>: ₹<span id="total-fee-2">800</span>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab active" data-tab="availability2"><span class="lang-availability">Availability</span></div>
+        <div class="tab" data-tab="reviews2"><span class="lang-reviews">Reviews</span></div>
+        <div class="tab" data-tab="publications2"><span class="lang-publications">Publications</span></div>
+        <div class="tab" data-tab="contact2"><span class="lang-contact">Contact</span></div>
+        <div class="tab" data-tab="insurance2"><span class="lang-insurance">Insurance</span></div>
+        <div class="tab" data-tab="booking2"><span class="lang-book-now">Book Now</span></div>
+      </div>
+
+      <div class="tab-content active" id="availability2">
+        <p><strong class="lang-next-available">Next Available:</strong> <span class="lang-wednesday">Wednesday</span> 4:00 PM</p>
+        <p><strong class="lang-consultation">Consultation:</strong> <span class="lang-inperson-only">In-person only</span></p>
+        <table>
+          <tr><th class="lang-mon">Mon</th><th class="lang-tue">Tue</th><th class="lang-wed">Wed</th><th class="lang-thu">Thu</th><th class="lang-fri">Fri</th><th class="lang-sat">Sat</th><th class="lang-sun">Sun</th></tr>
+          <tr><td>2-6</td><td>2-6</td><td>4-7</td><td>2-6</td><td>2-6</td><td class="lang-off">Off</td><td class="lang-off">Off</td></tr>
+        </table>
+        <button class="btn book-btn" data-doctor="Dr. Ananya Sharma"><span class="lang-book-appointment">Book Appointment</span></button>
+      </div>
+
+      <div class="tab-content" id="reviews2">
+        <!-- Ratings Breakdown Chart -->
+        <div class="ratings-chart">
+          <canvas id="ratingsChart2"></canvas>
+        </div>
+        
+        <div class="review-item">
+          <div class="review-header">
+            <span class="reviewer">Mohan Das</span>
+            <span class="review-date">March 10, 2023</span>
+          </div>
+          <div class="review-rating">★★★★★</div>
+          <p>"Dr. Ananya performed my knee surgery and the results have been fantastic. I'm back to my normal activities without pain."</p>
+        </div>
+        
+        <div class="review-item">
+          <div class="review-header">
+            <span class="reviewer">Sunita Reddy</span>
+            <span class="review-date">February 22, 2023</span>
+          </div>
+          <div class="review-rating">★★★★★</div>
+          <p>"Excellent surgeon with a caring approach. She explained the procedure in detail and made me feel comfortable throughout the process."</p>
+        </div>
+        
+        <div class="review-item more-reviews" style="display: none;">
+          <div class="review-header">
+            <span class="reviewer">Vikram Singh</span>
+            <span class="review-date">January 15, 2023</span>
+          </div>
+          <div class="review-rating">★★★★★</div>
+          <p>"Dr. Sharma is highly skilled and compassionate. She took the time to explain everything and made sure I was comfortable with the treatment plan."</p>
+        </div>
+        
+        <div class="load-more" id="load-more-2"><span class="lang-load-more">Load more reviews</span></div>
+        
+        <p><strong class="lang-achievements">Achievements:</strong> <span class="lang-best-young">Best Young Orthopedic Surgeon 2022</span></p>
+      </div>
+      
+      <div class="tab-content" id="publications2">
+        <div class="publication-item">
+          <div class="publication-title">"Innovative Approaches to Knee Replacement Surgery"</div>
+          <div class="publication-meta">
+            <span>Journal of Orthopedic Surgery, 2022</span>
+            <span><i class="fas fa-link"></i> <a href="#">View Publication</a></span>
+          </div>
+        </div>
+        
+        <div class="publication-item">
+          <div class="publication-title">"Minimally Invasive Techniques in Spinal Surgery"</div>
+          <div class="publication-meta">
+            <span>Spine Research International, 2021</span>
+            <span><i class="fas fa-link"></i> <a href="#">View Publication</a></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="contact2">
+        <div class="contact">
+          <a href="https://maps.google.com?q=AIIMS+Delhi" target="_blank"><i class="fa-solid fa-map-marker-alt"></i> New Delhi</a>
+          <a href="tel:+911234567891"><i class="fa-brands fa-whatsapp"></i> +91 1234567891</a>
+          <a href="mailto:dr.ananya@example.com"><i class="fa-solid fa-envelope"></i> dr.ananya@example.com</a>
+          <a href="#"><i class="fa-brands fa-twitter"></i> Twitter</a>
+          <a href="#" class="video-consultation-link"><i class="fas fa-video"></i> <span class="lang-start-video-consultation">Start Video Consultation</span></a>
+        </div>
+        
+        <!-- Map with Directions -->
+        <div class="map-container">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.366269462803!2d77.2064073150473!3d28.56708258242278!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce312d5e9ddc7%3A0x2c4ff7abb58c5c4c!2sAIIMS%20Delhi!5e0!3m2!1sen!2sin!4v1647859492405!5m2!1sen!2sin" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="insurance2">
+        <h4><span class="lang-insurance-accepted">Insurance Accepted</span></h4>
+        <div class="insurance-badges">
+          <div class="insurance-badge"><i class="fas fa-shield-alt"></i> Star Health</div>
+          <div class="insurance-badge"><i class="fas fa-shield-alt"></i> HDFC Ergo</div>
+          <div class="insurance-badge"><i class="fas fa-shield-alt"></i> ICICI Lombard</div>
+          <div class="insurance-badge"><i class="fas fa-shield-alt"></i> Bajaj Allianz</div>
+          <div class="insurance-badge"><i class="fas fa-shield-alt"></i> United India</div>
+        </div>
+        
+        <h4><span class="lang-payment-options">Payment Options</span></h4>
+        <div class="payment-options">
+          <div class="payment-option"><i class="fab fa-cc-visa payment-icon"></i> Visa</div>
+          <div class="payment-option"><i class="fab fa-cc-mastercard payment-icon"></i> MasterCard</div>
+          <div class="payment-option"><i class="fab fa-cc-amex payment-icon"></i> Amex</div>
+          <div class="payment-option"><i class="fas fa-mobile-alt payment-icon"></i> UPI</div>
+          <div class="payment-option"><i class="fas fa-wallet payment-icon"></i> <span class="lang-cash">Cash</span></div>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="booking2">
+        <div class="calendar-header">
+          <button class="calendar-nav" id="prev-month-2"><i class="fas fa-chevron-left"></i></button>
+          <span id="current-month-2">March 2023</span>
+          <button class="calendar-nav" id="next-month-2"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        
+        <div class="calendar">
+          <div class="calendar-day">S</div>
+          <div class="calendar-day">M</div>
+          <div class="calendar-day">T</div>
+          <div class="calendar-day">W</div>
+          <div class="calendar-day">T</div>
+          <div class="calendar-day">F</div>
+          <div class="calendar-day">S</div>
+          
+          <!-- Calendar days will be populated by JavaScript -->
+          <div class="calendar-day off">26</div>
+          <div class="calendar-day off">27</div>
+          <div class="calendar-day off">28</div>
+          <div class="calendar-day">1</div>
+          <div class="calendar-day">2</div>
+          <div class="calendar-day">3</div>
+          <div class="calendar-day">4</div>
+          <div class="calendar-day">5</div>
+          <div class="calendar-day">6</div>
+          <div class="calendar-day">7</div>
+          <div class="calendar-day">8</div>
+          <div class="calendar-day">9</div>
+          <div class="calendar-day">10</div>
+          <div class="calendar-day">11</div>
+          <div class="calendar-day">12</div>
+          <div class="calendar-day">13</div>
+          <div class="calendar-day">14</div>
+          <div class="calendar-day">15</div>
+          <div class="calendar-day">16</div>
+          <div class="calendar-day">17</div>
+          <div class="calendar-day">18</div>
+          <div class="calendar-day">19</div>
+          <div class="calendar-day">20</div>
+          <div class="calendar-day">21</div>
+          <div class="calendar-day">22</div>
+          <div class="calendar-day active">23</div>
+          <div class="calendar-day">24</div>
+          <div class="calendar-day">25</div>
+          <div class="calendar-day">26</div>
+          <div class="calendar-day">27</div>
+          <div class="calendar-day">28</div>
+          <div class="calendar-day">29</div>
+          <div class="calendar-day">30</div>
+          <div class="calendar-day">31</div>
+          <div class="calendar-day off">1</div>
+        </div>
+        
+        <h4><span class="lang-available-time-slots">Available Time Slots</span></h4>
+        <div class="time-slots">
+          <div class="time-slot unavailable">2:00 PM</div>
+          <div class="time-slot unavailable">2:30 PM</div>
+          <div class="time-slot unavailable">3:00 PM</div>
+          <div class="time-slot">3:30 PM</div>
+          <div class="time-slot">4:00 PM</div>
+          <div class="time-slot">4:30 PM</div>
+          <div class="time-slot">5:00 PM</div>
+          <div class="time-slot">5:30 PM</div>
+          <div class="time-slot unavailable">6:00 PM</div>
+        </div>
+        
+        <!-- Notification Preferences -->
+        <div class="notification-prefs">
+          <h4><span class="lang-notification-options">Notification Options</span></h4>
+          <div class="notification-option">
+            <input type="checkbox" id="email-reminder-2" checked>
+            <label for="email-reminder-2"><span class="lang-email-reminder">Email Reminder</span></label>
+          </div>
+          <div class="notification-option">
+            <input type="checkbox" id="sms-reminder-2" checked>
+            <label for="sms-reminder-2"><span class="lang-sms-reminder">SMS Reminder</span></label>
+          </div>
+          <div class="notification-option">
+            <input type="checkbox" id="whatsapp-reminder-2">
+            <label for="whatsapp-reminder-2"><span class="lang-whatsapp-reminder">WhatsApp Reminder</span></label>
+          </div>
+        </div>
+        
+        <button class="btn confirm-booking"><span class="lang-confirm-appointment">Confirm Appointment</span></button>
+      </div>
+
+      <div class="interactive">
+        <button class="favBtn"><i class="fa-regular fa-heart"></i></button>
+        <button class="shareBtn"><i class="fa-solid fa-share-nodes"></i></button>
+        <button class="download-pdf-btn" data-doctor-id="2"><i class="fas fa-download"></i> <span class="lang-download-pdf">PDF</span></button>
+        <button class="compare-doctor-btn" data-doctor-id="2"><i class="fas fa-balance-scale"></i> <span class="lang-compare">Compare</span></button>
+      </div>
+
+      <div class="qr">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=https://example.com/doctor2" alt="QR Code">
+        <p><span class="lang-scan-to-view">Scan to view profile</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Doctor 3 -->
+  <div class="doctor-card" data-specialization="physician" data-available="true">
+    <div class="verified-badge" title="Verified Doctor">
+      <i class="fas fa-check"></i>
+    </div>
+    <div class="top-section">
+      <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80" alt="Doctor Photo">
+      <div class="top-info">
+        <h2>Dr. Sameer Khan, MBBS</h2>
+        <p class="specialization">General Physician</p>
+        <span class="status-badge">🟢 <span class="lang-available">Available</span></span>
+      </div>
+      <div class="rating-badge">
+        <i class="fas fa-star"></i> 4.6
+      </div>
+    </div>
+
+    <div class="info-section">
+      <p><strong class="lang-experience">Experience:</strong> 5 <span class="lang-years">Years</span></p>
+      <p><strong class="lang-qualifications">Qualifications:</strong> MBBS</p>
+      <p><strong class="lang-affiliation">Affiliation:</strong> City Clinic, Mumbai</p>
+
+      <div class="badges">
+        <div class="badge"><i class="fa-solid fa-hospital"></i> City Clinic</div>
+        <div class="badge"><i class="fa-solid fa-clock"></i> <span class="lang-wait">10 min wait</span></div>
+        <div class="badge"><i class="fa-solid fa-language"></i> English, Marathi</div>
+        <div class="badge"><i class="fa-solid fa-indian-rupee-sign"></i> ₹500 <span class="lang-fee">Fee</span></div>
+      </div>
+      
+      <!-- Dynamic Fee Calculator -->
+      <div class="fee-calculator">
+        <h4 class="lang-consultation-fee">Consultation Fee</h4>
+        <div class="fee-option" data-fee="500">
+          <label>
+            <input type="radio" name="consultation-type-3" value="in-person" checked> 
+            <span class="lang-in-person">In-Person</span>
+          </label>
+          <span>₹500</span>
+        </div>
+        <div class="fee-option" data-fee="400">
+          <label>
+            <input type="radio" name="consultation-type-3" value="video"> 
+            <span class="lang-video-consultation">Video Consultation</span>
+          </label>
+          <span>₹400</span>
+        </div>
+        <div class="total-fee">
+          <span class="lang-total">Total</span>: ₹<span id="total-fee-3">500</span>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab active" data-tab="availability3"><span class="lang-availability">Availability</span></div>
+        <div class="tab" data-tab="reviews3"><span class="lang-reviews">Reviews</span></div>
+        <div class="tab" data-tab="publications3"><span class="lang-publications">Publications</span></div>
+        <div class="tab" data-tab="contact3"><span class="lang-contact">Contact</span></div>
+        <div class="tab" data-tab="insurance3"><span class="lang-insurance">Insurance</span></div>
+        <div class="tab" data-tab="booking3"><span class="lang-book-now">Book Now</span></div>
+      </div>
+
+      <div class="tab-content active" id="availability3">
+        <p><strong class="lang-next-available">Next Available:</strong> <span class="lang-today">Today</span> 5:00 PM</p>
+        <p><strong class="lang-consultation">Consultation:</strong> <span class="lang-online-inperson">Online / In-person</span></p>
+        <table>
+          <tr><th class="lang-mon">Mon</th><th class="lang-tue">Tue</th><th class="lang-wed">Wed</th><th class="lang-thu">Thu</th><th class="lang-fri">Fri</th><th class="lang-sat">Sat</th><th class="lang-sun">Sun</th></tr>
+          <tr><td>9-5</td><td>9-5</td><td>9-5</td><td>9-5</td><td>9-5</td><td>10-2</td><td class="lang-off">Off</td></tr>
+        </table>
+        <button class="btn book-btn" data-doctor="Dr. Sameer Khan"><span class="lang-book-appointment">Book Appointment</span></button>
+      </div>
+
+      <div class="tab-content" id="reviews3">
+        <!-- Ratings Breakdown Chart -->
+        <div class="ratings-chart">
+          <canvas id="ratingsChart3"></canvas>
+        </div>
+        
+        <div class="review-item">
+          <div class="review-header">
+            <span class="reviewer">Ravi Mehta</span>
+            <span class="review-date">March 5, 2023</span>
+          </div>
+          <div class="review-rating">★★★★☆</div>
+          <p>"Dr. Sameer is very approachable and listens carefully. He diagnosed my issue correctly and the treatment worked well."</p>
+        </div>
+        
+        <div class="review-item">
+          <div class="review-header">
+            <span class="reviewer">Neha Patel</span>
+            <span class="review-date">February 18, 2023</span>
+          </div>
+          <div class="review-rating">★★★★★</div>
+          <p>"Quick diagnosis and effective treatment. The clinic is clean and the staff is courteous. Will definitely visit again."</p>
+        </div>
+        
+        <div class="review-item more-reviews" style="display: none;">
+          <div class="review-header">
+            <span class="reviewer">Sanjay Verma</span>
+            <span class="review-date">January 30, 2023</span>
+          </div>
+          <div class="review-rating">★★★★★</div>
+          <p>"Dr. Khan is very patient and explains everything in detail. He doesn't prescribe unnecessary medicines and focuses on holistic treatment."</p>
+        </div>
+        
+        <div class="load-more" id="load-more-3"><span class="lang-load-more">Load more reviews</span></div>
+        
+        <p><strong class="lang-achievements">Achievements:</strong> <span class="lang-patients-choice">Patient's Choice Award 2022</span></p>
+      </div>
+      
+      <div class="tab-content" id="publications3">
+        <div class="publication-item">
+          <div class="publication-title">"Common Respiratory Illnesses in Urban Environments"</div>
+          <div class="publication-meta">
+            <span>Journal of General Medicine, 2022</span>
+            <span><i class="fas fa-link"></i> <a href="#">View Publication</a></span>
+          </div>
+        </div>
+        
+        <div class="publication-item">
+          <div class="publication-title">"Preventive Healthcare Strategies for Middle-Aged Adults"</div>
+          <div class="publication-meta">
+            <span>Healthcare Review, 2021</span>
+            <span><i class="fas fa-link"></i> <a href="#">View Publication</a></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="contact3">
+        <div class="contact">
+          <a href="https://maps.google.com?q=City+Clinic+Mumbai" target="_blank"><i class="fa-solid fa-map-marker-alt"></i> Mumbai</a>
+          <a href="tel:+911234567892"><i class="fa-brands fa-whatsapp"></i> +91 1234567892</a>
+          <a href="mailto:dr.sameer@example.com"><i class="fa-solid fa-envelope"></i> dr.sameer@example.com</a>
+          <a href="#"><i class="fa-brands fa-facebook"></i> Facebook</a>
+          <a href="#" class="video-consultation-link"><i class="fas fa-video"></i> <span class="lang-start-video-consultation">Start Video Consultation</span></a>
+        </div>
+        
+        <!-- Map with Directions -->
+        <div class="map-container">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3771.692060924668!2d72.834219315048!3d19.051722257757365!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7cce7b9f6bf1d%3A0xcbeb32c006e73b1f!2sCity%20Clinic!5e0!3m2!1sen!2sin!4v1647859581463!5m2!1sen!2sin" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="insurance3">
+        <h4><span class="lang-insurance-accepted">Insurance Accepted</span></h4>
+        <div class="insurance-badges">
+          <div class="insurance-badge"><i class="fas fa-shield-alt"></i> Star Health</div>
+          <div class="insurance-badge"><i class="fas fa-shield-alt"></i> HDFC Ergo</div>
+          <div class="insurance-badge"><i class="fas fa-shield-alt"></i> ICICI Lombard</div>
+        </div>
+        
+        <h4><span class="lang-payment-options">Payment Options</span></h4>
+        <div class="payment-options">
+          <div class="payment-option"><i class="fab fa-cc-visa payment-icon"></i> Visa</div>
+          <div class="payment-option"><i class="fab fa-cc-mastercard payment-icon"></i> MasterCard</div>
+          <div class="payment-option"><i class="fas fa-mobile-alt payment-icon"></i> UPI</div>
+          <div class="payment-option"><i class="fas fa-wallet payment-icon"></i> <span class="lang-cash">Cash</span></div>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="booking3">
+        <div class="calendar-header">
+          <button class="calendar-nav" id="prev-month-3"><i class="fas fa-chevron-left"></i></button>
+          <span id="current-month-3">March 2023</span>
+          <button class="calendar-nav" id="next-month-3"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        
+        <div class="calendar">
+          <div class="calendar-day">S</div>
+          <div class="calendar-day">M</div>
+          <div class="calendar-day">T</div>
+          <div class="calendar-day">W</div>
+          <div class="calendar-day">T</div>
+          <div class="calendar-day">F</div>
+          <div class="calendar-day">S</div>
+          
+          <!-- Calendar days will be populated by JavaScript -->
+          <div class="calendar-day off">26</div>
+          <div class="calendar-day off">27</div>
+          <div class="calendar-day off">28</div>
+          <div class="calendar-day">1</div>
+          <div class="calendar-day">2</div>
+          <div class="calendar-day">3</div>
+          <div class="calendar-day">4</div>
+          <div class="calendar-day">5</div>
+          <div class="calendar-day">6</div>
+          <div class="calendar-day">7</div>
+          <div class="calendar-day">8</div>
+          <div class="calendar-day">9</div>
+          <div class="calendar-day">10</div>
+          <div class="calendar-day">11</div>
+          <div class="calendar-day">12</div>
+          <div class="calendar-day">13</div>
+          <div class="calendar-day">14</div>
+          <div class="calendar-day">15</div>
+          <div class="calendar-day">16</div>
+          <div class="calendar-day">17</div>
+          <div class="calendar-day">18</div>
+          <div class="calendar-day">19</div>
+          <div class="calendar-day">20</div>
+          <div class="calendar-day">21</div>
+          <div class="calendar-day active">22</div>
+          <div class="calendar-day">23</div>
+          <div class="calendar-day">24</div>
+          <div class="calendar-day">25</div>
+          <div class="calendar-day">26</div>
+          <div class="calendar-day">27</div>
+          <div class="calendar-day">28</div>
+          <div class="calendar-day">29</div>
+          <div class="calendar-day">30</div>
+          <div class="calendar-day">31</div>
+          <div class="calendar-day off">1</div>
+        </div>
+        
+        <h4><span class="lang-available-time-slots">Available Time Slots</span></h4>
+        <div class="time-slots">
+          <div class="time-slot">9:00 AM</div>
+          <div class="time-slot">9:30 AM</div>
+          <div class="time-slot">10:00 AM</div>
+          <div class="time-slot">10:30 AM</div>
+          <div class="time-slot">11:00 AM</div>
+          <div class="time-slot">11:30 AM</div>
+          <div class="time-slot">12:00 PM</div>
+          <div class="time-slot">12:30 PM</div>
+          <div class="time-slot">1:00 PM</div>
+          <div class="time-slot">1:30 PM</div>
+          <div class="time-slot">2:00 PM</div>
+          <div class="time-slot">2:30 PM</div>
+          <div class="time-slot">3:00 PM</div>
+          <div class="time-slot">3:30 PM</div>
+          <div class="time-slot">4:00 PM</div>
+          <div class="time-slot">4:30 PM</div>
+          <div class="time-slot unavailable">5:00 PM</div>
+        </div>
+        
+        <!-- Notification Preferences -->
+        <div class="notification-prefs">
+          <h4><span class="lang-notification-options">Notification Options</span></h4>
+          <div class="notification-option">
+            <input type="checkbox" id="email-reminder-3" checked>
+            <label for="email-reminder-3"><span class="lang-email-reminder">Email Reminder</span></label>
+          </div>
+          <div class="notification-option">
+            <input type="checkbox" id="sms-reminder-3" checked>
+            <label for="sms-reminder-3"><span class="lang-sms-reminder">SMS Reminder</span></label>
+          </div>
+          <div class="notification-option">
+            <input type="checkbox" id="whatsapp-reminder-3">
+            <label for="whatsapp-reminder-3"><span class="lang-whatsapp-reminder">WhatsApp Reminder</span></label>
+          </div>
+        </div>
+        
+        <button class="btn confirm-booking"><span class="lang-confirm-appointment">Confirm Appointment</span></button>
+      </div>
+
+      <div class="interactive">
+        <button class="favBtn"><i class="fa-regular fa-heart"></i></button>
+        <button class="shareBtn"><i class="fa-solid fa-share-nodes"></i></button>
+        <button class="download-pdf-btn" data-doctor-id="3"><i class="fas fa-download"></i> <span class="lang-download-pdf">PDF</span></button>
+        <button class="compare-doctor-btn" data-doctor-id="3"><i class="fas fa-balance-scale"></i> <span class="lang-compare">Compare</span></button>
+      </div>
+
+      <div class="qr">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=https://example.com/doctor3" alt="QR Code">
+        <p><span class="lang-scan-to-view">Scan to view profile</span></p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Compare Section -->
+<div class="compare-section" id="compare-section">
+  <div class="compare-container">
+    <div class="compare-doctors" id="compare-doctors">
+      <!-- Selected doctors for comparison will appear here -->
+    </div>
+    <div class="compare-actions">
+      <button class="btn" id="compare-now-btn"><span class="lang-compare-now">Compare Now</span></button>
+      <button class="btn btn-secondary" id="clear-compare-btn"><span class="lang-clear-all">Clear All</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast">
+  <i class="fas fa-check-circle"></i>
+  <span id="toast-message"></span>
+</div>
+
+<!-- Booking Modal -->
+<div class="modal" id="booking-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="lang-book-appointment">Book Appointment</h3>
+      <button class="modal-close">&times;</button>
+    </div>
+    <form id="booking-form">
+      <input type="hidden" id="doctor-name" name="doctor">
+      <input type="hidden" id="appointment-date" name="date">
+      <input type="hidden" id="appointment-time" name="time">
+      
+      <div class="form-group">
+        <label for="patient-name" class="lang-full-name">Full Name</label>
+        <input type="text" id="patient-name" name="patientName" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="patient-email" class="lang-email">Email</label>
+        <input type="email" id="patient-email" name="patientEmail" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="patient-phone" class="lang-phone-number">Phone Number</label>
+        <input type="tel" id="patient-phone" name="patientPhone" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="appointment-type" class="lang-appointment-type">Appointment Type</label>
+        <select id="appointment-type" name="appointmentType" required>
+          <option value=""><span class="lang-select-type">Select type</span></option>
+          <option value="in-person"><span class="lang-in-person">In-person</span></option>
+          <option value="video"><span class="lang-video-consultation">Video Consultation</span></option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="reason" class="lang-reason-for-visit">Reason for Visit</label>
+        <textarea id="reason" name="reason" rows="3"></textarea>
+      </div>
+      
+      <button type="submit" class="btn"><span class="lang-confirm-booking">Confirm Booking</span></button>
+    </form>
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

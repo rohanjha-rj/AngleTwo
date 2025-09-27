@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2basil - Comprehensive Healthcare Platform</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#64748B',
+                        muted: '#F1F5F9',
+                        accent: '#10B981',
+                        destructive: '#EF4444',
+                        background: '#FFFFFF',
+                        foreground: '#1F2937',
+                        border: '#E5E7EB',
+                        darkBg: '#0F172A',
+                        darkForeground: '#E2E8F0',
+                        darkMuted: '#1E293B',
+                        darkBorder: '#334155'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-muted dark:bg-darkBg min-h-screen font-sans transition-colors duration-200">
+    <!-- Top Utility Bar -->
+    <div class="bg-white dark:bg-darkMuted border-b border-border dark:border-darkBorder py-2">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <!-- Currency Display - Only INR -->
+                    <div class="flex items-center">
+                        <span class="text-sm text-foreground dark:text-darkForeground mr-2">Currency:</span>
+                        <div class="flex bg-muted dark:bg-darkBorder rounded-full p-1">
+                            <span class="currency-display px-3 py-1 text-xs rounded-full bg-primary text-white">INR</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Language Selector -->
+                    <div class="relative group">
+                        <button class="flex items-center text-sm text-foreground dark:text-darkForeground">
+                            <i class="fas fa-globe mr-1"></i>
+                            <span id="currentLanguage">English</span>
+                            <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="absolute hidden group-hover:block bg-white dark:bg-darkMuted shadow-lg rounded-md mt-1 p-2 w-48 z-50">
+                            <div class="language-option px-3 py-2 rounded-md text-sm text-foreground dark:text-darkForeground" data-lang="en">
+                                <span class="language-flag" style="background-color: #00247D; position: relative;"></span> English
+                            </div>
+                            <div class="language-option px-3 py-2 rounded-md text-sm text-foreground dark:text-darkForeground" data-lang="hi">
+                                <span class="language-flag hindi-flag"></span> Hindi
+                            </div>
+                            <div class="language-option px-3 py-2 rounded-md text-sm text-foreground dark:text-darkForeground" data-lang="ta">
+                                <span class="language-flag tamil-flag"></span> Tamil
+                            </div>
+                            <div class="language-option px-3 py-2 rounded-md text-sm text-foreground dark:text-darkForeground" data-lang="bn">
+                                <span class="language-flag bengali-flag"></span> Bengali
+                            </div>
+                            <div class="language-option px-3 py-2 rounded-md text-sm text-foreground dark:text-darkForeground" data-lang="te">
+                                <span class="language-flag telugu-flag"></span> Telugu
+                            </div>
+                            <div class="language-option px-3 py-2 rounded-md text-sm text-foreground dark:text-darkForeground" data-lang="mr">
+                                <span class="language-flag marathi-flag"></span> Marathi
+                            </div>
+                            <div class="language-option px-3 py-2 rounded-md text-sm text-foreground dark:text-darkForeground" data-lang="gu">
+                                <span class="language-flag gujarati-flag"></span> Gujarati
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dark Mode Toggle -->
+                <div>
+                    <button id="darkModeToggle" class="text-foreground dark:text-darkForeground">
+                        <i class="fas fa-moon" id="darkIcon"></i>
+                        <i class="fas fa-sun hidden" id="lightIcon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-darkMuted shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-heartbeat text-primary text-2xl mr-2"></i>
+                        <span class="font-bold text-xl text-foreground dark:text-darkForeground">2basil</span>
+                    </div>
+                    <div class="hidden md:ml-6 md:flex md:space-x-8">
+                        <a href="#" class="nav-link text-foreground dark:text-darkForeground px-3 py-2 text-sm font-medium">Home</a>
+                        <a href="#doctors" class="nav-link text-foreground dark:text-darkForeground px-3 py-2 text-sm font-medium">Doctors</a>
+                        <a href="#pharmacy" class="nav-link text-foreground dark:text-darkForeground px-3 py-2 text-sm font-medium">Pharmacy</a>
+                        <a href="#labs" class="nav-link text-foreground dark:text-darkForeground px-3 py-2 text-sm font-medium">Labs</a>
+                        <a href="#community" class="nav-link text-foreground dark:text-darkForeground px-3 py-2 text-sm font-medium">Community</a>
+                        <a href="#health-tips" class="nav-link text-foreground dark:text-darkForeground px-3 py-2 text-sm font-medium">Health Tips</a>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-4">
+                    <button id="notificationBtn" class="relative text-foreground dark:text-darkForeground">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <button id="chatSupportBtn" class="bg-muted dark:bg-darkBorder text-foreground dark:text-darkForeground px-4 py-2 rounded-md text-sm font-medium flex items-center">
+                        <i class="fas fa-comment-medical mr-2"></i> Support
+                    </button>
+                    <button id="loginBtn" class="bg-primary text-white px-4 py-2 rounded-md text-sm font-medium">Login</button>
+                    <button id="signupBtn" class="bg-accent text-white px-4 py-2 rounded-md text-sm font-medium">Sign Up</button>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="notificationBtnMobile" class="relative text-foreground dark:text-darkForeground mr-4">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <button id="mobile-menu-button" class="text-foreground dark:text-darkForeground">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#" class="block px-3 py-2 text-base font-medium text-foreground dark:text-darkForeground">Home</a>
+                <a href="#doctors" class="block px-3 py-2 text-base font-medium text-foreground dark:text-darkForeground">Doctors</a>
+                <a href="#pharmacy" class="block px-3 py-2 text-base font-medium text-foreground dark:text-darkForeground">Pharmacy</a>
+                <a href="#labs" class="block px-3 py-2 text-base font-medium text-foreground dark:text-darkForeground">Labs</a>
+                <a href="#community" class="block px-3 py-2 text-base font-medium text-foreground dark:text-darkForeground">Community</a>
+                <a href="#health-tips" class="block px-3 py-2 text-base font-medium text-foreground dark:text-darkForeground">Health Tips</a>
+                <div class="pt-4 pb-3 border-t border-border dark:border-darkBorder">
+                    <button id="mobileChatBtn" class="block w-full text-left px-3 py-2 text-base font-medium text-foreground dark:text-darkForeground">
+                        <i class="fas fa-comment-medical mr-2"></i> Support
+                    </button>
+                    <button id="mobileLoginBtn" class="block w-full text-left px-3 py-2 text-base font-medium text-primary">Login</button>
+                    <button id="mobileSignupBtn" class="block w-full text-left px-3 py-2 text-base font-medium text-accent">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Notification Panel -->
+    <div id="notificationPanel" class="fixed top-16 right-4 bg-white dark:bg-darkMuted shadow-xl rounded-lg w-80 z-50 hidden">
+        <div class="p-4 border-b border-border dark:border-darkBorder">
+            <h3 class="font-bold text-foreground dark:text-darkForeground">Notifications</h3>
+        </div>
+        <div class="max-h-96 overflow-y-auto">
+            <div class="p-4 border-b border-border dark:border-darkBorder">
+                <div class="flex items-start">
+                    <div class="bg-blue-100 dark:bg-blue-900 p-2 rounded-full mr-3">
+                        <i class="fas fa-calendar-check text-blue-500 dark:text-blue-300"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-foreground dark:text-darkForeground">Your appointment with <span class="font-medium">Dr. Sharma</span> is confirmed for tomorrow at 10:00 AM</p>
+                        <p class="text-xs text-secondary dark:text-darkForeground mt-1">2 hours ago</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-b border-border dark:border-darkBorder">
+                <div class="flex items-start">
+                    <div class="bg-green-100 dark:bg-green-900 p-2 rounded-full mr-3">
+                        <i class="fas fa-pills text-green-500 dark:text-green-300"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-foreground dark:text-darkForeground">Reminder: Take your <span class="font-medium">Metformin</span> medication</p>
+                        <p class="text-xs text-secondary dark:text-darkForeground mt-1">5 hours ago</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="flex items-start">
+                    <div class="bg-purple-100 dark:bg-purple-900 p-2 rounded-full mr-3">
+                        <i class="fas fa-file-medical text-purple-500 dark:text-purple-300"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-foreground dark:text-darkForeground">Your lab results for <span class="font-medium">Blood Test</span> are now available</p>
+                        <p class="text-xs text-secondary dark:text-darkForeground mt-1">1 day ago</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-4 border-t border-border dark:border-darkBorder">
+            <button class="w-full bg-muted dark:bg-darkBorder text-foreground dark:text-darkForeground py-2 rounded-md text-sm">View All Notifications</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4">Your Health, Our Priority</h1>
+                    <p class="text-xl mb-8">Connect with trusted healthcare professionals from the comfort of your home</p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <button class="bg-white text-primary px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors">Book an Appointment</button>
+                        <button class="bg-accent text-white px-6 py-3 rounded-md font-medium hover:bg-emerald-600 transition-colors">Find a Doctor</button>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80" alt="Doctor and patient having a video consultation with medical devices visible" class="rounded-lg shadow-xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Quick Action -->
+    <div class="floating-action">
+        <button id="emergencyBtn" class="bg-destructive text-white w-14 h-14 rounded-full flex items-center justify-center pulse">
+            <i class="fas fa-plus"></i>
+        </button>
+        
+        <!-- Emergency Options -->
+        <div id="emergencyOptions" class="absolute bottom-full right-0 mb-2 w-48 bg-white dark:bg-darkMuted shadow-lg rounded-lg p-2 hidden">
+            <button class="w-full text-left px-4 py-3 rounded-md text-foreground dark:text-darkForeground hover:bg-muted dark:hover:bg-darkBorder flex items-center">
+                <i class="fas fa-ambulance text-destructive mr-3"></i>
+                <span>Emergency Services</span>
+            </button>
+            <button class="w-full text-left px-4 py-3 rounded-md text-foreground dark:text-darkForeground hover:bg-muted dark:hover:bg-darkBorder flex items-center">
+                <i class="fas fa-user-md text-primary mr-3"></i>
+                <span>Quick Consultation</span>
+            </button>
+            <button class="w-full text-left px-4 py-3 rounded-md text-foreground dark:text-darkForeground hover:bg-muted dark:hover:bg-darkBorder flex items-center">
+                <i class="fas fa-first-aid text-accent mr-3"></i>
+                <span>First Aid Guide</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Login/Signup Modal -->
+    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white dark:bg-darkMuted rounded-lg shadow-xl w-full max-w-md p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-foreground dark:text-darkForeground" id="authModalTitle">Login</h3>
+                <button id="closeAuthModal" class="text-foreground dark:text-darkForeground">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="loginForm">
+                <div class="mb-4">
+                    <label class="block text-foreground dark:text-darkForeground text-sm font-medium mb-2" for="email">Email or Phone</label>
+                    <input type="text" id="email" class="w-full px-3 py-2 border border-border dark:border-darkBorder rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-darkBg dark:text-darkForeground">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-foreground dark:text-darkForeground text-sm font-medium mb-2" for="password">Password</label>
+                    <input type="password" id="password" class="w-full px-3 py-2 border border-border dark:border-darkBorder rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-darkBg dark:text-darkForeground">
+                    <a href="#" class="text-sm text-primary mt-1 block">Forgot Password?</a>
+                </div>
+                <button id="loginSubmit" class="w-full bg-primary text-white py-2 rounded-md font-medium mb-4 hover:bg-blue-600 transition-colors">Login</button>
+                <p class="text-center text-foreground dark:text-darkForeground">
+                    Don't have an account? <a href="#" id="switchToSignup" class="text-primary hover:underline">Sign up</a>
+                </p>
+            </div>
+            
+            <div id="signupForm" class="hidden">
+                <div class="mb-4">
+                    <label class="block text-foreground dark:text-darkForeground text-sm font-medium mb-2" for="signupName">Full Name</label>
+                    <input type="text" id="signupName" class="w-full px-3 py-2 border border-border dark:border-darkBorder rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-darkBg dark:text-darkForeground">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-foreground dark:text-darkForeground text-sm font-medium mb-2" for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" class="w-full px-3 py-2 border border-border dark:border-darkBorder rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-darkBg dark:text-darkForeground">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-foreground dark:text-darkForeground text-sm font-medium mb-2" for="signupPhone">Phone</label>
+                    <input type="tel" id="signupPhone" class="w-full px-3 py-2 border border-border dark:border-darkBorder rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-darkBg dark:text-darkForeground">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-foreground dark:text-darkForeground text-sm font-medium mb-2" for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" class="w-full px-3 py-2 border border-border dark:border-darkBorder rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-darkBg dark:text-darkForeground">
+                </div>
+                <button id="signupSubmit" class="w-full bg-primary text-white py-2 rounded-md font-medium mb-4 hover:bg-blue-600 transition-colors">Create Account</button>
+                <p class="text-center text-foreground dark:text-darkForeground">
+                    Already have an account? <a href="#" id="switchToLogin" class="text-primary hover:underline">Login</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Profile Dashboard -->
+    <section id="profileDashboard" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 hidden">
+        <h2 class="text-3xl font-bold text-foreground dark:text-darkForeground mb-8">Patient Dashboard</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Personal Details Card -->
+            <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 card-hover">
+                <div class="flex items-center mb-6">
+                    <div class="w-20 h-20 rounded-full bg-muted dark:bg-darkBorder overflow-hidden mr-4">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&h=80&q=80" alt="User profile photo of a 30-year-old person" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-foreground dark:text-darkForeground">Rahul Sharma</h3>
+                        <p class="text-secondary dark:text-darkForeground">Age: 30 | Blood Group: O+</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-3">
+                    <div class="flex items-center">
+                        <i class="fas fa-envelope text-primary mr-3"></i>
+                        <span class="text-foreground dark:text-darkForeground">rahul.sharma@example.com</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-phone text-primary mr-3"></i>
+                        <span class="text-foreground dark:text-darkForeground">+91 98765 43210</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-map-marker-alt text-primary mr-3"></i>
+                        <span class="text-foreground dark:text-darkForeground">Mumbai, Maharashtra</span>
+                    </div>
+                </div>
+                
+                <div class="mt-6 pt-4 border-t border-border dark:border-darkBorder">
+                    <h4 class="font-medium text-foreground dark:text-darkForeground mb-2">Emergency Contact</h4>
+                    <p class="text-foreground dark:text-darkForeground">Priya Sharma - +91 98765 43210 (Spouse)</p>
+                </div>
+                
+                <button class="mt-6 w-full bg-primary text-white py-2 rounded-md font-medium hover:bg-blue-600 transition-colors">Edit Profile</button>
+            </div>
+            
+            <!-- Upcoming Appointments -->
+            <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 card-hover">
+                <h3 class="text-xl font-bold text-foreground dark:text-darkForeground mb-6">Upcoming Appointments</h3>
+                
+                <div class="space-y-4">
+                    <div class="border-l-4 border-accent pl-4 py-2">
+                        <p class="font-medium text-foreground dark:text-darkForeground">Dr. Meera Patel - Cardiology</p>
+                        <p class="text-secondary dark:text-darkForeground">Tomorrow, 10:00 AM (Video Call)</p>
+                        <button class="text-primary text-sm mt-2 hover:underline">Join Call</button>
+                    </div>
+                    
+                    <div class="border-l-4 border-primary pl-4 py-2">
+                        <p class="font-medium text-foreground dark:text-darkForeground">Dr. Rajiv Malhotra - Dermatology</p>
+                        <p class="text-secondary dark:text-darkForeground">June 15, 2:30 PM (In-Clinic)</p>
+                        <button class="text-primary text-sm mt-2 hover:underline">View Details</button>
+                    </div>
+                </div>
+                
+                <button class="mt-6 w-full bg-muted dark:bg-darkBorder text-foreground dark:text-darkForeground py-2 rounded-md font-medium hover:bg-gray-200 dark:hover:bg-darkBorder/80 transition-colors">View All Appointments</button>
+            </div>
+            
+            <!-- Health Stats -->
+            <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 card-hover">
+                <h3 class="text-xl font-bold text-foreground dark:text-darkForeground mb-6">Health Stats</h3>
+                
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-muted dark:bg-darkBorder p-3 rounded text-center">
+                        <p class="text-2xl font-bold text-foreground dark:text-darkForeground">120/80</p>
+                        <p class="text-secondary dark:text-darkForeground text-sm">Blood Pressure</p>
+                    </div>
+                    <div class="bg-muted dark:bg-darkBorder p-3 rounded text-center">
+                        <p class="text-2xl font-bold text-foreground dark:text-darkForeground">98</p>
+                        <p class="text-secondary dark:text-darkForeground text-sm">Heart Rate</p>
+                    </div>
+                    <div class="bg-muted dark:bg-darkBorder p-3 rounded text-center">
+                        <p class="text-2xl font-bold text-foreground dark:text-darkForeground">98.6°F</p>
+                        <p class="text-secondary dark:text-darkForeground text-sm">Temperature</p>
+                    </div>
+                    <div class="bg-muted dark:bg-darkBorder p-3 rounded text-center">
+                        <p class="text-2xl font-bold text-foreground dark:text-darkForeground">22</p>
+                        <p class="text-secondary dark:text-darkForeground text-sm">BMI</p>
+                    </div>
+                </div>
+                
+                <button class="w-full bg-primary text-white py-2 rounded-md font-medium hover:bg-blue-600 transition-colors">Log Health Data</button>
+            </div>
+        </div>
+        
+        <!-- Health Trackers -->
+        <div class="mt-12">
+            <h3 class="text-2xl font-bold text-foreground dark:text-darkForeground mb-6">Health Trackers</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 flex flex-col items-center">
+                    <div class="tracker-circle mb-4">
+                        <div class="tracker-progress" style="--progress: 70%"></div>
+                        <span class="text-3xl font-bold text-foreground dark:text-darkForeground">7,890</span>
+                        <span class="text-secondary dark:text-darkForeground text-sm">steps</span>
+                    </div>
+                    <h4 class="font-bold text-foreground dark:text-darkForeground mb-2">Step Count</h4>
+                    <p class="text-secondary dark:text-darkForeground text-sm text-center">70% of your daily goal (10,000 steps)</p>
+                </div>
+                
+                <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 flex flex-col items-center">
+                    <div class="tracker-circle mb-4">
+                        <div class="tracker-progress" style="--progress: 45%"></div>
+                        <span class="text-3xl font-bold text-foreground dark:text-darkForeground">1.8</span>
+                        <span class="text-secondary dark:text-darkForeground text-sm">L</span>
+                    </div>
+                    <h4 class="font-bold text-foreground dark:text-darkForeground mb-2">Water Intake</h4>
+                    <p class="text-secondary dark:text-darkForeground text-sm text-center">45% of your daily goal (4L)</p>
+                </div>
+                
+                <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 flex flex-col items-center">
+                    <div class="tracker-circle mb-4">
+                        <div class="tracker-progress" style="--progress: 85%"></div>
+                        <span class="text-3xl font-bold text-foreground dark:text-darkForeground">6.5</span>
+                        <span class="text-secondary dark:text-darkForeground text-sm">hrs</span>
+                    </div>
+                    <h4 class="font-bold text-foreground dark:text-darkForeground mb-2">Sleep</h4>
+                    <p class="text-secondary dark:text-darkForeground text-sm text-center">85% of your daily goal (8 hrs)</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Medication Reminders -->
+        <div class="mt-12">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-foreground dark:text-darkForeground">Medication Reminders</h3>
+                <button class="bg-primary text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-600 transition-colors">Add Reminder</button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 reminder-card">
+                    <div class="flex justify-between items-start mb-3">
+                        <h4 class="font-bold text-foreground dark:text-darkForeground">Metformin</h4>
+                        <span class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs px-2 py-1 rounded-full">Active</span>
+                    </div>
+                    <p class="text-secondary dark:text-darkForeground mb-4">500mg, twice daily after meals</p>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="text-sm text-foreground dark:text-darkForeground">Next dose:</span>
+                            <span class="text-sm font-medium text-foreground dark:text-darkForeground">Today, 8:00 PM</span>
+                        </div>
+                        <button class="text-primary text-sm hover:underline">Snooze</button>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 reminder-card urgent">
+                    <div class="flex justify-between items-start mb-3">
+                        <h4 class="font-bold text-foreground dark:text-darkForeground">Atorvastatin</h4>
+                        <span class="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 text-xs px-2 py-1 rounded-full">Missed</span>
+                    </div>
+                    <p class="text-secondary dark:text-darkForeground mb-4">20mg, once daily at night</p>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="text-sm text-foreground dark:text-darkForeground">Last dose:</span>
+                            <span class="text-sm font-medium text-foreground dark:text-darkForeground">Yesterday, 10:00 PM</span>
+                        </div>
+                        <button class="text-primary text-sm hover:underline">Mark as Taken</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Family Accounts -->
+        <div class="mt-12">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-foreground dark:text-darkForeground">Family Accounts</h3>
+                <button class="bg-primary text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-600 transition-colors">Add Family Member</button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-16 h-16 rounded-full bg-muted dark:bg-darkBorder overflow-hidden mr-4">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=64&h=64&q=80" alt="Child profile photo of a 5-year-old girl" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-foreground dark:text-darkForeground">Aarav Sharma</h4>
+                            <p class="text-secondary dark:text-darkForeground">Age: 5 | Son</p>
+                        </div>
+                    </div>
+                    <button class="w-full bg-muted dark:bg-darkBorder text-foreground dark:text-darkForeground py-2 rounded-md text-sm hover:bg-gray-200 dark:hover:bg-darkBorder/80 transition-colors">View Profile</button>
+                </div>
+                
+                <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-16 h-16 rounded-full bg-muted dark:bg-darkBorder overflow-hidden mr-4">
+                            <img src="https://images.unsplash.com/photo-1551847812-715d4707e5e4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=64&h=64&q=80" alt="Elderly profile photo of a 70-year-old woman" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-foreground dark:text-darkForeground">Laxmi Sharma</h4>
+                            <p class="text-secondary dark:text-darkForeground">Age: 70 | Mother</p>
+                        </div>
+                    </div>
+                    <button class="w-full bg-muted dark:bg-darkBorder text-foreground dark:text-darkForeground py-2 rounded-md text-sm hover:bg-gray-200 dark:hover:bg-darkBorder/80 transition-colors">View Profile</button>
+                </div>
+                
+                <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 card-hover flex items-center justify-center cursor-pointer hover:bg-muted dark:hover:bg-darkBorder/50 transition-colors">
+                    <div class="text-center">
+                        <i class="fas fa-plus-circle text-4xl text-primary mb-2"></i>
+                        <p class="text-foreground dark:text-darkForeground">Add Family Member</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Health Tips Section -->
+    <section id="health-tips" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h2 class="text-3xl font-bold text-foreground dark:text-darkForeground mb-2">Health & Wellness Tips</h2>
+        <p class="text-secondary dark:text-darkForeground mb-8">Expert advice to help you maintain a healthy lifestyle</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md overflow-hidden card-hover health-tip">
+                <div class="h-48 bg-muted dark:bg-darkBorder overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&h=250&q=80" alt="Person exercising outdoors" class="w-full h-full object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-foreground dark:text-darkForeground mb-2">Benefits of Regular Exercise</h3>
+                    <p class="text-secondary dark:text-darkForeground mb-4">Discover how 30 minutes of daily exercise can improve your physical and mental health.</p>
+                    <a href="#" class="text-primary font-medium hover:underline">Read More</a>
+                </div>
+            </div>
+            
+            <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md overflow-hidden card-hover health-tip">
+                <div class="h-48 bg-muted dark:bg-darkBorder overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwa90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&h=250&q=80" alt="Healthy food options" class="w-full h-full object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-foreground dark:text-darkForeground mb-2">Nutrition for a Healthy Heart</h3>
+                    <p class="text-secondary dark:text-darkForeground mb-4">Learn which foods can help maintain cardiovascular health and prevent heart disease.</p>
+                    <a href="#" class="text-primary font-medium hover:underline">Read More</a>
+                </div>
+            </div>
+            
+            <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md overflow-hidden card-hover health-tip">
+                <div class="h-48 bg-muted dark:bg-darkBorder overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&h=250&q=80" alt="Person meditating" class="w-full h-full object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-foreground dark:text-darkForeground mb-2">Managing Stress Effectively</h3>
+                    <p class="text-secondary dark:text-darkForeground mb-4">Explore techniques to reduce stress and improve your mental wellbeing in daily life.</p>
+                    <a href="#" class="text-primary font-medium hover:underline">Read More</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-8 text-center">
+            <button class="bg-muted dark:bg-darkBorder text-foreground dark:text-darkForeground px-6 py-3 rounded-md font-medium hover:bg-gray-200 dark:hover:bg-darkBorder/80 transition-colors">View All Articles</button>
+        </div>
+    </section>
+
+    <!-- Doctor Search Section -->
+    <section id="doctors" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h2 class="text-3xl font-bold text-foreground dark:text-darkForeground mb-2">Find the Right Doctor</h2>
+        <p class="text-secondary dark:text-darkForeground mb-8">Browse through our network of experienced healthcare professionals</p>
+        
+        <!-- Search Filters -->
+        <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-foreground dark:text-darkForeground text-sm font-medium mb-2">Specialty</label>
+                    <select class="w-full px-3 py-2 border border-border dark:border-darkBorder rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-darkBg dark:text-darkForeground">
+                        <option>All Specialties</option>
+                        <option>Cardiology</option>
+                        <option>Dermatology</option>
+                        <option>Pediatrics</option>
+                        <option>Orthopedics</option>
+                        <option>Neurology</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-foreground dark:text-darkForeground text-sm font-medium mb-2">Location</label>
+                    <div class="flex">
+                        <input type="text" placeholder="City or PIN" class="w-full px-3 py-2 border border-border dark:border-darkBorder rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-darkBg dark:text-darkForeground">
+                        <button class="bg-primary text-white px-3 rounded-r-md">
+                            <i class="fas fa-location-arrow"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-foreground dark:text-darkForeground text-sm font-medium mb-2">Availability</label>
+                    <select class="w-full px-3 py-2 border border-border dark:border-darkBorder rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-darkBg dark:text-darkForeground">
+                        <option>Any Time</option>
+                        <option>Today</option>
+                        <option>This Week</option>
+                        <option>Next Week</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-foreground dark:text-darkForeground text-sm font-medium mb-2">Search by Name</label>
+                    <input type="text" placeholder="Doctor's name" class="w-full px-3 py-2 border border-border dark:border-darkBorder rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-darkBg dark:text-darkForeground">
+                </div>
+            </div>
+            
+            <button class="mt-4 w-full bg-primary text-white py-2 rounded-md font-medium hover:bg-blue-600 transition-colors">Search Doctors</button>
+        </div>
+        
+        <!-- Doctor List -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Doctor Card 1 -->
+            <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md overflow-hidden card-hover">
+                <div class="h-48 bg-muted dark:bg-darkBorder overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&h=250&q=80" alt="Professional photo of Dr. Meera Patel, a cardiologist in a white coat" class="w-full h-full object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-foreground dark:text-darkForeground">Dr. Meera Patel</h3>
+                    <p class="text-accent font-medium mb-2">Cardiologist</p>
+                    <div class="flex items-center mb-3">
+                        <div class="flex text-yellow-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="text-secondary dark:text-darkForeground ml-2">4.7 (128 reviews)</span>
+                    </div>
+                    <p class="text-secondary dark:text-darkForeground mb-4">15+ years of experience in cardiology with focus on preventive care.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-foreground dark:text-darkForeground">₹800 consultation</span>
+                        <button class="bg-primary text-white px-4 py-2 rounded-md text-sm font-medium book-doctor" data-doctor="Dr. Meera Patel" data-specialty="Cardiologist" data-fee="800">Book Now</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Doctor Card 2 -->
+            <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md overflow-hidden card-hover">
+                <div class="h-48 bg-muted dark:bg-darkBorder overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&h=250&q=80" alt="Professional photo of Dr. Rajiv Malhotra, a dermatologist in a white coat" class="w-full h-full object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-foreground dark:text-darkForeground">Dr. Rajiv Malhotra</h3>
+                    <p class="text-accent font-medium mb-2">Dermatologist</p>
+                    <div class="flex items-center mb-3">
+                        <div class="flex text-yellow-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="text-secondary dark:text-darkForeground ml-2">4.9 (94 reviews)</span>
+                    </div>
+                    <p class="text-secondary dark:text-darkForeground mb-4">Specialized in medical and cosmetic dermatology with 12 years experience.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-foreground dark:text-darkForeground">₹1000 consultation</span>
+                        <button class="bg-primary text-white px-4 py-2 rounded-md text-sm font-medium book-doctor" data-doctor="Dr. Rajiv Malhotra" data-specialty="Dermatologist" data-fee="1000">Book Now</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Doctor Card 3 -->
+            <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md overflow-hidden card-hover">
+                <div class="h-48 bg-muted dark:bg-darkBorder overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&h=250&q=80" alt="Professional photo of Dr. Anjali Desai, a pediatrician with a friendly smile" class="w-full h-full object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-foreground dark:text-darkForeground">Dr. Anjali Desai</h3>
+                    <p class="text-accent font-medium mb-2">Pediatrician</p>
+                    <div class="flex items-center mb-3">
+                        <div class="flex text-yellow-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="text-secondary dark:text-darkForeground ml-2">4.8 (207 reviews)</span>
+                    </div>
+                    <p class="text-secondary dark:text-darkForeground mb-4">Caring pediatric specialist with focus on child development and wellness.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-foreground dark:text-darkForeground">₹600 consultation</span>
+                        <button class="bg-primary text-white px-4 py-2 rounded-md text-sm font-medium book-doctor" data-doctor="Dr. Anjali Desai" data-specialty="Pediatrician" data-fee="600">Book Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-8 text-center">
+            <button class="bg-muted dark:bg-darkBorder text-foreground dark:text-darkForeground px-6 py-3 rounded-md font-medium hover:bg-gray-200 dark:hover:bg-darkBorder/80 transition-colors">Load More Doctors</button>
+        </div>
+    </section>
+
+    <!-- Doctor Profile Modal -->
+    <div id="doctorProfileModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-white dark:bg-darkMuted rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-6">
+                    <div class="flex items-center">
+                        <div class="w-24 h-24 rounded-full bg-muted dark:bg-darkBorder overflow-hidden mr-6">
+                            <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=96&h=96&q=80" alt="Professional headshot of Dr. Meera Patel, a cardiologist" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-foreground dark:text-darkForeground">Dr. Meera Patel</h3>
+                            <p class="text-accent font-medium mb-2">Cardiologist</p>
+                            <div class="flex items-center">
+                                <div class="flex text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <span class="text-secondary dark:text-darkForeground ml-2">4.7 (128 reviews)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="closeDoctorModal" class="text-foreground dark:text-darkForeground">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div class="col-span-2">
+                        <h4 class="font-bold text-foreground dark:text-darkForeground mb-3">About</h4>
+                        <p class="text-secondary dark:text-darkForeground mb-4">Dr. Meera Patel is a board-certified cardiologist with over 15 years of experience. She specializes in preventive cardiology, heart disease management, and cardiac rehabilitation. Dr. Patel completed her residency at AIIMS Delhi and fellowship at Cleveland Clinic.</p>
+                        
+                        <h4 class="font-bold text-foreground dark:text-darkForeground mb-3">Education & Qualifications</h4>
+                        <ul class="text-secondary dark:text-darkForeground list-disc list-inside mb-4">
+                            <li>MD, AIIMS Delhi</li>
+                            <li>Board Certified in Cardiology</li>
+                            <li>Fellow of the Cardiological Society of India</li>
+                        </ul>
+                        
+                        <h4 class="font-bold text-foreground dark:text-darkForeground mb-3">Specialties</h4>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-muted dark:bg-darkBorder text-foreground dark:text-darkForeground px-3 py-1 rounded-full text-sm">Preventive Cardiology</span>
+                            <span class="bg-muted dark:bg-darkBorder text-foreground dark:text-darkForeground px-3 py-1 rounded-full text-sm">Heart Disease Management</span>
+                            <span class="bg-muted dark:bg-darkBorder text-foreground dark:text-darkForeground px-3 py-1 rounded-full text-sm">Cardiac Rehabilitation</span>
+                            <span class="bg-muted dark:bg-darkBorder text-foreground dark:text-darkForeground px-3 py-1 rounded-full text-sm">Hypertension</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="bg-muted dark:bg-darkBorder p-4 rounded-lg mb-6">
+                            <h4 class="font-bold text-foreground dark:text-darkForeground mb-3">Consultation Fee</h4>
+                            <p class="text-2xl font-bold text-foreground dark:text-darkForeground mb-4">₹800</p>
+                            <button class="w-full bg-primary text-white py-2 rounded-md font-medium mb-3 book-appointment" data-doctor="Dr. Meera Patel" data-specialty="Cardiologist" data-fee="800">Book Appointment</button>
+                            <button class="w-full bg-white dark:bg-darkBg text-primary py-2 rounded-md font-medium border border-primary hover:bg-blue-50 dark:hover:bg-darkBorder transition-colors">Message Doctor</button>
+                        </div>
+                        
+                        <h4 class="font-bold text-foreground dark:text-darkForeground mb-3">Languages</h4>
+                        <p class="text-secondary dark:text-darkForeground mb-6">English, Hindi, Gujarati</p>
+                        
+                        <h4 class="font-bold text-foreground dark:text-darkForeground mb-3">Availability</h4>
+                        <p class="text-secondary dark:text-darkForeground">Mon, Wed, Fri: 9AM - 5PM<br>Tue, Thu: 10AM - 6PM</p>
+                    </div>
+                </div>
+                
+                <h4 class="font-bold text-foreground dark:text-darkForeground mb-3">Patient Reviews</h4>
+                <div class="space-y-4">
+                    <div class="border-b border-border dark:border-darkBorder pb-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <p class="font-medium text-foreground dark:text-darkForeground">Rahul Sharma</p>
+                            <div class="flex text-yellow-400 text-sm">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <p class="text-secondary dark:text-darkForeground">Dr. Patel is incredibly thorough and explains everything in detail. She helped me manage my hypertension effectively.</p>
+                    </div>
+                    
+                    <div class="border-b border-border dark:border-darkBorder pb-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <p class="font-medium text-foreground dark:text-darkForeground">Priya Singh</p>
+                            <div class="flex text-yellow-400 text-sm">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <p class="text-secondary dark:text-darkForeground">I've been seeing Dr. Patel for my heart condition for 3 years now. She's compassionate, knowledgeable, and always available for questions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Appointment Booking Modal -->
+    <div id="appointmentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-white dark:bg-darkMuted rounded-lg shadow-xl w-full max-w-2xl">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-foreground dark:text-darkForeground">Book Appointment</h3>
+                    <button id="closeAppointmentModal" class="text-foreground dark:text-darkForeground">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="flex items-center mb-6">
+                    <div class="w-16 h-16 rounded-full bg-muted dark:bg-darkBorder overflow-hidden mr-4">
+                        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=64&h=64&q=80" alt="Professional headshot of Dr. Meera Patel" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-foreground dark:text-darkForeground" id="appointmentDoctorName">Dr. Meera Patel</h4>
+                        <p class="text-secondary dark:text-darkForeground" id="appointmentDoctorSpecialty">Cardiologist</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-foreground dark:text-darkForeground text-sm font-medium mb-2">Appointment Type</label>
+                        <select class="w-full px-3 py-2 border border-border dark:border-darkBorder rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-darkBg dark:text-darkForeground">
+                            <option>Video Consultation</option>
+                            <option>Voice Call</option>
+                            <option>In-Clinic Visit</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-foreground dark:text-darkForeground text-sm font-medium mb-2">Date</label>
+                        <input type="date" class="w-full px-3 py-2 border border-border dark:border-darkBorder rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-darkBg dark:text-darkForeground">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-foreground dark:text-darkForeground text-sm font-medium mb-2">Time Slot</label>
+                        <select class="w-full px-3 py-2 border border-border dark:border-darkBorder rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-darkBg dark:text-darkForeground">
+                            <option>9:00 AM - 9:30 AM</option>
+                            <option>9:30 AM - 10:00 AM</option>
+                            <option>10:00 AM - 10:30 AM</option>
+                            <option>10:30 AM - 11:00 AM</option>
+                            <option>11:00 AM - 11:30 AM</option>
+                            <option>11:30 AM - 12:00 PM</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-foreground dark:text-darkForeground text-sm font-medium mb-2">Reason for Visit</label>
+                        <input type="text" placeholder="Briefly describe your symptoms" class="w-full px-3 py-2 border border-border dark:border-darkBorder rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-darkBg dark:text-darkForeground">
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-foreground dark:text-darkForeground text-sm font-medium mb-2">Additional Notes (Optional)</label>
+                    <textarea class="w-full px-3 py-2 border border-border dark:border-darkBorder rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-darkBg dark:text-darkForeground" rows="3" placeholder="Any additional information for the doctor"></textarea>
+                </div>
+                
+                <div class="flex justify-between items-center">
+                    <p class="text-foreground dark:text-darkForeground font-medium">Consultation Fee: <span class="text-xl" id="appointmentFee">₹800</span></p>
+                    <button class="bg-primary text-white px-6 py-2 rounded-md font-medium hover:bg-blue-600 transition-colors">Confirm Booking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Support Modal -->
+    <div id="chatModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-white dark:bg-darkMuted rounded-lg shadow-xl w-full max-w-md">
+            <div class="p-4 border-b border-border dark:border-darkBorder flex justify-between items-center">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white mr-3">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-foreground dark:text-darkForeground">Medical Support</h3>
+                        <p class="text-xs text-secondary dark:text-darkForeground">Online</p>
+                    </div>
+                </div>
+                <button id="closeChatModal" class="text-foreground dark:text-darkForeground">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="chat-container p-4 bg-muted dark:bg-darkBg">
+                <div class="doctor-bubble">
+                    <p>Hello! How can I help you today?</p>
+                    <span class="text-xs text-secondary dark:text-darkForeground block mt-1">10:00 AM</span>
+                </div>
+                
+                <div class="user-bubble">
+                    <p>I need help with booking an appointment</p>
+                    <span class="text-xs text-white opacity-70 block mt-1">10:02 AM</span>
+                </div>
+                
+                <div class="doctor-bubble">
+                    <p>Sure, I can help with that. Which doctor would you like to book an appointment with?</p>
+                    <span class="text-xs text-secondary dark:text-darkForeground block mt-1">10:03 AM</span>
+                </div>
+            </div>
+            
+            <div class="p-4 border-t border-border dark:border-darkBorder">
+                <div class="flex">
+                    <input type="text" placeholder="Type your message..." class="w-full px-4 py-2 border border-border dark:border-darkBorder rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-darkBg dark:text-darkForeground">
+                    <button class="bg-primary text-white px-4 rounded-r-md hover:bg-blue-600 transition-colors">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Medical Records Section -->
+    <section class="bg-white dark:bg-darkMuted py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-foreground dark:text-darkForeground mb-2">Medical Records & History</h2>
+            <p class="text-secondary dark:text-darkForeground mb-8">Keep all your health information organized and accessible</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Consultations -->
+                <div class="bg-muted dark:bg-darkBorder rounded-lg p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white mr-4">
+                            <i class="fas fa-stethoscope"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-foreground dark:text-darkForeground">Consultations</h3>
+                    </div>
+                    <p class="text-secondary dark:text-darkForeground mb-6">View notes and details from all your past consultations with healthcare providers.</p>
+                    <button class="w-full bg-primary text-white py-2 rounded-md font-medium hover:bg-blue-600 transition-colors">View History</button>
+                </div>
+                
+                <!-- Lab Reports -->
+                <div class="bg-muted dark:bg-darkBorder rounded-lg p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-accent flex items-center justify-center text-white mr-4">
+                            <i class="fas fa-vial"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-foreground dark:text-darkForeground">Lab Reports</h3>
+                    </div>
+                    <p class="text-secondary dark:text-darkForeground mb-6">Upload, view, and organize your lab test results from different providers.</p>
+                    <button class="w-full bg-accent text-white py-2 rounded-md font-medium hover:bg-emerald-600 transition-colors">Manage Reports</button>
+                </div>
+                
+                <!-- Medical History -->
+                <div class="bg-muted dark:bg-darkBorder rounded-lg p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-secondary flex items-center justify-center text-white mr-4">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-foreground dark:text-darkForeground">Medical History</h3>
+                    </div>
+                    <p class="text-secondary dark:text-darkForeground mb-6">Maintain a complete record of your health history to share with providers.</p>
+                    <button class="w-full bg-secondary text-white py-2 rounded-md font-medium hover:bg-gray-600 transition-colors">Update History</button>
+                </div>
+            </div>
+            
+            <!-- Upload Area -->
+            <div class="mt-12 bg-muted dark:bg-darkBorder rounded-lg p-6">
+                <h3 class="text-xl font-bold text-foreground dark:text-darkForeground mb-4">Upload Medical Documents</h3>
+                <div class="border-2 border-dashed border-border dark:border-darkBorder rounded-lg p-8 text-center">
+                    <i class="fas fa-cloud-upload-alt text-3xl text-primary mb-4"></i>
+                    <p class="text-foreground dark:text-darkForeground font-medium mb-2">Drag & drop files here</p>
+                    <p class="text-secondary dark:text-darkForeground mb-4">or</p>
+                    <button class="bg-primary text-white px-4 py-2 rounded-md font-medium hover:bg-blue-600 transition-colors">Browse Files</button>
+                    <p class="text-secondary dark:text-darkForeground text-sm mt-4">Supported formats: PDF, JPG, PNG (Max 10MB each)</p>
+                </div>
+                
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="bg-white dark:bg-darkMuted rounded-lg p-4 flex items-center">
+                        <i class="fas fa-file-pdf text-red-500 text-xl mr-3"></i>
+                        <div>
+                            <p class="text-foreground dark:text-darkForeground font-medium text-sm">Blood_Test_Results.pdf</p>
+                            <p class="text-secondary dark:text-darkForeground text-xs">Uploaded: Jun 10, 2023</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-darkMuted rounded-lg p-4 flex items-center">
+                        <i class="fas fa-file-image text-blue-500 text-xl mr-3"></i>
+                        <div>
+                            <p class="text-foreground dark:text-darkForeground font-medium text-sm">XRay_Chest.jpg</p>
+                            <p class="text-secondary dark:text-darkForeground text-xs">Uploaded: May 28, 2023</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-darkMuted rounded-lg p-4 flex items-center">
+                        <i class="fas fa-file-pdf text-red-500 text-xl mr-3"></i>
+                        <div>
+                            <p class="text-foreground dark:text-darkForeground font-medium text-sm">MRI_Report.pdf</p>
+                            <p class="text-secondary dark:text-darkForeground text-xs">Uploaded: Apr 15, 2023</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pharmacy Section -->
+    <section id="pharmacy" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h2 class="text-3xl font-bold text-foreground dark:text-darkForeground mb-2">Pharmacy Services</h2>
+        <p class="text-secondary dark:text-darkForeground mb-8">Get your medications delivered to your doorstep</p>
+        
+        <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 mb-8">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-6 md:mb-0">
+                    <h3 class="text-2xl font-bold text-foreground dark:text-darkForeground mb-4">Order Prescription Medications</h3>
+                    <p class="text-secondary dark:text-darkForeground mb-6">Upload your prescription and get your medications delivered from trusted local pharmacies.</p>
+                    <button class="bg-primary text-white px-6 py-3 rounded-md font-medium hover:bg-blue-600 transition-colors">Upload Prescription</button>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&h=300&q=80" alt="Pharmacy shelf with various medications and prescription bottles" class="rounded-lg">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Labs Section -->
+    <section id="labs" class="bg-muted dark:bg-darkBorder py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-foreground dark:text-darkForeground mb-2">Lab Test Booking</h2>
+            <p class="text-secondary dark:text-darkForeground mb-8">Book diagnostic tests from trusted labs at discounted rates</p>
+            
+            <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 mb-8">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 mb-6 md:mb-0">
+                        <h3 class="text-2xl font-bold text-foreground dark:text-darkForeground mb-4">Schedule Lab Tests</h3>
+                        <p class="text-secondary dark:text-darkForeground mb-6">Book blood tests, urine tests, and other diagnostics with our partner labs. Home collection available.</p>
+                        <button class="bg-primary text-white px-6 py-3 rounded-md font-medium hover:bg-blue-600 transition-colors">Book a Test</button>
+                    </div>
+                    <div class="md:w-1/2 flex justify-center">
+                        <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&h=300&q=80" alt="Medical lab technician performing blood test" class="rounded-lg">
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="text-2xl font-bold text-foreground dark:text-darkForeground mb-6">Popular Lab Tests</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 card-hover">
+                    <h4 class="font-bold text-foreground dark:text-darkForeground mb-2">Complete Blood Count (CBC)</h4>
+                    <p class="text-secondary dark:text-darkForeground mb-4">Measures different components of your blood including red cells, white cells, and platelets.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-foreground dark:text-darkForeground">₹499</span>
+                        <span class="text-secondary dark:text-darkForeground line-through">₹699</span>
+                    </div>
+                    <button class="w-full bg-primary text-white py-2 rounded-md font-medium mt-4 hover:bg-blue-600 transition-colors">Book Now</button>
+                </div>
+                
+                <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 card-hover">
+                    <h4 class="font-bold text-foreground dark:text-darkForeground mb-2">Basic Metabolic Panel</h4>
+                    <p class="text-secondary dark:text-darkForeground mb-4">Measures glucose, calcium, electrolytes and kidney function to assess overall metabolic health.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-foreground dark:text-darkForeground">₹599</span>
+                        <span class="text-secondary dark:text-darkForeground line-through">₹799</span>
+                    </div>
+                    <button class="w-full bg-primary text-white py-2 rounded-md font-medium mt-4 hover:bg-blue-600 transition-colors">Book Now</button>
+                </div>
+                
+                <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 card-hover">
+                    <h4 class="font-bold text-foreground dark:text-darkForeground mb-2">Lipid Panel</h4>
+                    <p class="text-secondary dark:text-darkForeground mb-4">Measures cholesterol levels including HDL, LDL, and triglycerides to assess heart health.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-foreground dark:text-darkForeground">₹449</span>
+                        <span class="text-secondary dark:text-darkForeground line-through">₹649</span>
+                    </div>
+                    <button class="w-full bg-primary text-white py-2 rounded-md font-medium mt-4 hover:bg-blue-600 transition-colors">Book Now</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Services Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h2 class="text-3xl font-bold text-foreground dark:text-darkForeground mb-2">Emergency Services</h2>
+        <p class="text-secondary dark:text-darkForeground mb-8">Immediate medical assistance when you need it most</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 emergency-card">
+                <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900 flex items-center justify-center text-red-500 dark:text-red-300 mb-4">
+                    <i class="fas fa-ambulance"></i>
+                </div>
+                <h3 class="text-xl font-bold text-foreground dark:text-darkForeground mb-2">Ambulance Service</h3>
+                <p class="text-secondary dark:text-darkForeground mb-4">24/7 emergency ambulance service with trained paramedics.</p>
+                <button class="bg-destructive text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-600 transition-colors">Call Now</button>
+            </div>
+            
+            <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 emergency-card">
+                <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-500 dark:text-blue-300 mb-4">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <h3 class="text-xl font-bold text-foreground dark:text-darkForeground mb-2">Emergency Consultation</h3>
+                <p class="text-secondary dark:text-darkForeground mb-4">Immediate video consultation with emergency medicine specialists.</p>
+                <button class="bg-primary text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-600 transition-colors">Connect Now</button>
+            </div>
+            
+            <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 emergency-card">
+                <div class="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center text-green-500 dark:text-green-300 mb-4">
+                    <i class="fas fa-first-aid"></i>
+                </div>
+                <h3 class="text-xl font-bold text-foreground dark:text-darkForeground mb-2">First Aid Guide</h3>
+                <p class="text-secondary dark:text-darkForeground mb-4">Step-by-step instructions for common emergency situations.</p>
+                <button class="bg-accent text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-emerald-600 transition-colors">View Guide</button>
+            </div>
+            
+            <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6 emergency-card">
+                <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-purple-500 dark:text-purple-300 mb-4">
+                    <i class="fas fa-hospital"></i>
+                </div>
+                <h3 class="text-xl font-bold text-foreground dark:text-darkForeground mb-2">Nearby Hospitals</h3>
+                <p class="text-secondary dark:text-darkForeground mb-4">Find the nearest emergency rooms and hospitals with availability.</p>
+                <button class="bg-purple-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors">Find Hospitals</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Symptom Checker Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h2 class="text-3xl font-bold text-foreground dark:text-darkForeground mb-2">AI Symptom Checker</h2>
+        <p class="text-secondary dark:text-darkForeground mb-8">Get guidance on possible conditions before consulting a doctor</p>
+        
+        <div class="bg-white dark:bg-darkMuted rounded-lg shadow-md p-6">
+            <div class="mb-6 bg-yellow-50 dark:bg-yellow-900 border-l-4 border-yellow-400 p-4">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-triangle text-yellow-400"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-yellow-700 dark:text-yellow-300">
+                            <strong>Disclaimer:</strong> This tool is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold text-foreground dark:text-darkForeground mb-4">Describe Your Symptoms</h3>
+                    <div class="mb-4">
+                        <label class="block text-foreground dark:text-darkForeground text-sm font-medium mb-2">Main Symptom</label>
+                        <input type="text" placeholder="e.g. Headache, Fever, Cough" class="w-full px-3 py-2 border border-border dark:border-darkBorder rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-darkBg dark:text-darkForeground">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-foreground dark:text-darkForeground text-sm font-medium mb-2">Duration</label>
+                        <select class="w-full px-3 py-2 border border-border dark:border-darkBorder rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-darkBg dark:text-darkForeground">
+                            <option>Less than 24 hours</option>
+                            <option>1-3 days</option>
+                            <option>3-7 days</option>
+                            <option>1-2 weeks</option>
+                            <option>More than 2 weeks</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-foreground dark:text-darkForeground text-sm font-medium mb-2">Severity</label>
+                        <div class="flex space-x-2">
+                            <button class="bg-muted dark:bg-darkBorder text-foreground dark:text-darkForeground px-3 py-1 rounded text-sm symptom-severity" data-severity="mild">Mild</button>
+                            <button class="bg-primary text-white px-3 py-1 rounded text-sm symptom-severity" data-severity="moderate">Moderate</button>
+                            <button class="bg-muted dark:bg-darkBorder text-foreground dark:text-darkForeground px-3 py-1 rounded text-sm symptom-severity" data-severity="severe">Severe</button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-foreground dark:text-darkForeground text-sm font-medium mb-2">Additional Symptoms</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded text-primary focus:ring-primary">
+                                <span class="ml-2 text-sm text-foreground dark:text-darkForeground">Fever</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded text-primary focus:ring-primary">
+                                <span class="ml-2 text-sm text-foreground dark:text-darkForeground">Nausea</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded text-primary focus:ring-primary">
+                                <span class="ml-2 text-sm text-foreground dark:text-darkForeground">Dizziness</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded text-primary focus:ring-primary">
+                                <span class="ml-2 text-sm text-foreground dark:text-darkForeground">Fatigue</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full bg-primary text-white py-2 rounded-md font-medium hover:bg-blue-600 transition-colors">Analyze Symptoms</button>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold text-foreground dark:text-darkForeground mb-4">Possible Conditions</h3>
+                    <div class="bg-muted dark:bg-darkBorder rounded-lg p-4 mb-4">
+                        <h4 class="font-bold text-foreground dark:text-darkForeground mb-2">Common Cold</h4>
+                        <p class="text-secondary dark:text-darkForeground text-sm">Viral infection of the upper respiratory tract characterized by runny nose, sneezing, and coughing.</p>
+                        <div class="flex items-center mt-3">
+                            <span class="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded">65% match</span>
+                            <a href="#" class="text-xs text-primary ml-3 hover:underline">Learn more</a>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-muted dark:bg-darkBorder rounded-lg p-4 mb-4">
+                        <h4 class="font-bold text-foreground dark:text-darkForeground mb-2">Allergic Rhinitis</h4>
+                        <p class="text-secondary dark:text-darkForeground text-sm">Allergic response causing itchy, watery eyes, sneezing, and other similar symptoms.</p>
+                        <div class="flex items-center mt-3">
+                            <span class="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded">42% match</span>
+                            <a href="#" class="text-xs text-primary ml-3 hover:underline">Learn more</a>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-muted dark:bg-darkBorder rounded-lg p-4">
+                        <h4 class="font-bold text-foreground dark:text-darkForeground mb-2">Influenza (Flu)</h4>
+                        <p class="text-secondary dark:text-darkForeground text-sm">Contagious respiratory illness caused by influenza viruses that infect the nose, throat, and sometimes the lungs.</p>
+                        <div class="flex items-center mt-3">
+                            <span class="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded">38% match</span>
+                            <a href="#" class="text-xs text-primary ml-3 hover:underline">Learn more</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-darkMuted border-t border-border dark:border-darkBorder py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-heartbeat text-primary text-2xl mr-2"></i>
+                        <span class="font-bold text-xl text-foreground dark:text-darkForeground">2basil</span>
+                    </div>
+                    <p class="text-secondary dark:text-darkForeground mb-4">Your trusted healthcare platform connecting patients with medical professionals.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-secondary dark:text-darkForeground hover:text-primary"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-secondary dark:text-darkForeground hover:text-primary"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-secondary dark:text-darkForeground hover:text-primary"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-secondary dark:text-darkForeground hover:text-primary"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="font-bold text-foreground dark:text-darkForeground mb-4">Services</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-secondary dark:text-darkForeground hover:text-primary">Doctor Consultations</a></li>
+                        <li><a href="#" class="text-secondary dark:text-darkForeground hover:text-primary">Online Pharmacy</a></li>
+                        <li><a href="#" class="text-secondary dark:text-darkForeground hover:text-primary">Lab Tests</a></li>
+                        <li><a href="#" class="text-secondary dark:text-darkForeground hover:text-primary">Health Checkups</a></li>
+                        <li><a href="#" class="text-secondary dark:text-darkForeground hover:text-primary">Mental Health</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-bold text-foreground dark:text-darkForeground mb-4">Company</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-secondary dark:text-darkForeground hover:text-primary">About Us</a></li>
+                        <li><a href="#" class="text-secondary dark:text-darkForeground hover:text-primary">Careers</a></li>
+                        <li><a href="#" class="text-secondary dark:text-darkForeground hover:text-primary">Blog</a></li>
+                        <li><a href="#" class="text-secondary dark:text-darkForeground hover:text-primary">Press</a></li>
+                        <li><a href="#" class="text-secondary dark:text-darkForeground hover:text-primary">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-bold text-foreground dark:text-darkForeground mb-4">Download Our App</h3>
+                    <p class="text-secondary dark:text-darkForeground mb-4">Get the full experience with our mobile app</p>
+                    <div class="flex space-x-2">
+                        <a href="#" class="bg-foreground dark:bg-darkForeground text-white px-4 py-2 rounded flex items-center hover:bg-gray-800 dark:hover:bg-darkForeground/80 transition-colors">
+                            <i class="fab fa-apple mr-2"></i>
+                            <div>
+                                <span class="text-xs">Download on the</span>
+                                <span class="font-medium">App Store</span>
+                            </div>
+                        </a>
+                        <a href="#" class="bg-foreground dark:bg-darkForeground text-white px-4 py-2 rounded flex items-center hover:bg-gray-800 dark:hover:bg-darkForeground/80 transition-colors">
+                            <i class="fab fa-google-play mr-2"></i>
+                            <div>
+                                <span class="text-xs">GET IT ON</span>
+                                <span class="font-medium">Google Play</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-border dark:border-darkBorder mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-secondary dark:text-darkForeground text-sm">© 2023 2basil. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-secondary dark:text-darkForeground hover:text-primary text-sm">Privacy Policy</a>
+                    <a href="#" class="text-secondary dark:text-darkForeground hover:text-primary text-sm">Terms of Service</a>
+                    <a href="#" class="text-secondary dark:text-darkForeground hover:text-primary text-sm">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

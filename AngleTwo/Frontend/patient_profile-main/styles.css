@@ -1,0 +1,251 @@
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+        }
+        
+        .dark .gradient-bg {
+            background: linear-gradient(135deg, #1E40AF 0%, #1E3A8A 100%);
+        }
+        
+        .card-hover {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .card-hover:hover {
+            box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.05);
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #3B82F6;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .symptom-node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .symptom-node:hover {
+            transform: scale(1.05);
+            background-color: #EFF6FF;
+        }
+        
+        .dark .symptom-node:hover {
+            background-color: #1E3A8A;
+        }
+        
+        .video-call-container {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+        }
+        
+        .chat-container {
+            height: 500px;
+            overflow-y: auto;
+        }
+        
+        .chat-bubble {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            margin-bottom: 12px;
+        }
+        
+        .user-bubble {
+            background-color: #3B82F6;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .doctor-bubble {
+            background-color: #E5E7EB;
+            color: #1F2937;
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .dark .doctor-bubble {
+            background-color: #334155;
+            color: #E2E8F0;
+        }
+        
+        .language-option {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .language-option:hover {
+            background-color: #F1F5F9;
+        }
+        
+        .dark .language-option:hover {
+            background-color: #1E293B;
+        }
+        
+        .currency-display {
+            transition: all 0.3s ease;
+        }
+        
+        /* New styles for animations and features */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .reminder-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid #10B981;
+        }
+        
+        .reminder-card.urgent {
+            border-left-color: #EF4444;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #EF4444;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .health-tip {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .health-tip::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .health-tip:hover::before {
+            left: 100%;
+        }
+        
+        .floating-action {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 40;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* New styles for Indian languages */
+        .language-flag {
+            width: 20px;
+            height: 15px;
+            display: inline-block;
+            margin-right: 8px;
+            background-size: cover;
+            background-position: center;
+            vertical-align: middle;
+            border-radius: 2px;
+        }
+        
+        .hindi-flag { background-color: #FF9933; }
+        .hindi-flag::after { background-color: #138808; content: ''; display: block; height: 5px; width: 20px; }
+        .hindi-flag::before { background-color: #FFFFFF; content: ''; display: block; height: 5px; width: 20px; }
+        
+        .tamil-flag { background-color: #FF9933; }
+        .tamil-flag::after { background-color: #138808; content: ''; display: block; height: 5px; width: 20px; }
+        .tamil-flag::before { background-color: #FFFFFF; content: ''; display: block; height: 5px; width: 20px; }
+        
+        .bengali-flag { background-color: #FF9933; }
+        .bengali-flag::after { background-color: #138808; content: ''; display: block; height: 5px; width: 20px; }
+        .bengali-flag::before { background-color: #FFFFFF; content: ''; display: block; height: 5px; width: 20px; }
+        
+        .telugu-flag { background-color: #FF9933; }
+        .telugu-flag::after { background-color: #138808; content: ''; display: block; height: 5px; width: 20px; }
+        .telugu-flag::before { background-color: #FFFFFF; content: ''; display: block; height: 5px; width: 20px; }
+        
+        .marathi-flag { background-color: #FF9933; }
+        .marathi-flag::after { background-color: #138808; content: ''; display: block; height: 5px; width: 20px; }
+        .marathi-flag::before { background-color: #FFFFFF; content: ''; display: block; height: 5px; width: 20px; }
+        
+        .gujarati-flag { background-color: #FF9933; }
+        .gujarati-flag::after { background-color: #138808; content: ''; display: block; height: 5px; width: 20px; }
+        .gujarati-flag::before { background-color: #FFFFFF; content: ''; display: block; height: 5px; width: 20px; }
+        
+        .kannada-flag { background-color: #FF9933; }
+        .kannada-flag::after { background-color: #138808; content: ''; display: block; height: 5px; width: 20px; }
+        .kannada-flag::before { background-color: #FFFFFF; content: ''; display: block; height: 5px; width: 20px; }
+        
+        .malayalam-flag { background-color: #FF9933; }
+        .malayalam-flag::after { background-color: #138808; content: ''; display: block; height: 5px; width: 20px; }
+        .malayalam-flag::before { background-color: #FFFFFF; content: ''; display: block; height: 5px; width: 20px; }
+        
+        .punjabi-flag { background-color: #FF9933; }
+        .punjabi-flag::after { background-color: #138808; content: ''; display: block; height: 5px; width: 20px; }
+        .punjabi-flag::before { background-color: #FFFFFF; content: ''; display: block; height: 5px; width: 20px; }
+        
+        /* Health tracker styles */
+        .tracker-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .tracker-progress {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(#10B981 0% var(--progress), #E5E7EB var(--progress) 100%);
+            mask: radial-gradient(white 55%, transparent 60%);
+            -webkit-mask: radial-gradient(white 55%, transparent 60%);
+        }
+        
+        /* Emergency services */
+        .emergency-card {
+            transition: all 0.3s ease;
+            border-top: 4px solid transparent;
+        }
+        
+        .emergency-card:hover {
+            border-top-color: #EF4444;
+            transform: translateY(-5px);
+        }
